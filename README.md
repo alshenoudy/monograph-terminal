@@ -60,7 +60,7 @@ npm run build
 npm run preview
 ```
 
-Before deploying, set `siteUrl` in [src/config/site.ts](./src/config/site.ts) — canonical URLs, RSS,
+Before deploying, set `siteUrl` in [src/config/customize.ts](./src/config/customize.ts) — canonical URLs, RSS,
 sitemap, social images, and JSON-LD all derive from it.
 
 ## Content

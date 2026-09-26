@@ -1,19 +1,18 @@
 /**
- * Single source of truth for everything site-wide.
+ * Single configuration file for the Monograph site.
  *
- * Identity, CV, socials, navigation, metadata, and form settings all live
- * here. The home hero (`heroConfig`) and the About page (`aboutConfig`) are
- * thin re-export slices of this object, so editing this file is the only
- * thing you ever need to touch.
+ * Everything site-wide is driven from this file: identity, CV, socials,
+ * navigation, metadata, and form settings. Edit values here; every page and
+ * component derives from it. There is no other config source.
  */
 
-export type HeroFact = {
+export type Fact = {
   label: string;
   value: string;
   href?: string;
 };
 
-export type HeroExperience = {
+export type Experience = {
   period: string;
   title: string;
   href?: string;
@@ -21,7 +20,7 @@ export type HeroExperience = {
   description?: string;
 };
 
-export type AboutEducation = {
+export type Education = {
   period: string;
   title: string;
   href?: string;
@@ -29,13 +28,13 @@ export type AboutEducation = {
   description?: string;
 };
 
-export type AboutProject = {
+export type Project = {
   title: string;
   href?: string;
   description?: string;
 };
 
-export type AboutPublication = {
+export type Publication = {
   title: string;
   href?: string;
   venue?: string;
@@ -45,6 +44,11 @@ export type AboutPublication = {
 export type SkillGroup = {
   group: string;
   items: string[];
+};
+
+export type Social = {
+  label: string;
+  href: string;
 };
 
 const name = "John Doe";
@@ -72,7 +76,7 @@ export const siteConfig = {
    * Label→value rows. An optional `href` turns the value into an inline link.
    * Leave the array empty to hide the whole facts block.
    */
-  facts: [] as HeroFact[],
+  facts: [] as Fact[],
 
   /**
    * Experience entries, rendered in the home hero and on the About page.
@@ -104,7 +108,7 @@ export const siteConfig = {
       description:
         "Shipped marketing and editorial sites for clients, and learned to write markup that survives a redesign.",
     },
-  ] as HeroExperience[],
+  ] as Experience[],
 
   /**
    * Education entries. Same shape as experience; leave empty to hide the
@@ -125,7 +129,7 @@ export const siteConfig = {
       description:
         "Honours project on resilient UI component systems. Graduated with first-class honours.",
     },
-  ] as AboutEducation[],
+  ] as Education[],
 
   /**
    * Side projects, open-source tools, or notable builds. Optional href turns
@@ -143,7 +147,7 @@ export const siteConfig = {
       description:
         "A minimal React hook collection for building terminal-like command palettes and inline prompts.",
     },
-  ] as AboutProject[],
+  ] as Project[],
 
   /**
    * Papers, articles, talks, or other published work. Optional venue/year.
@@ -159,7 +163,7 @@ export const siteConfig = {
       venue: "Systems Design Talks",
       year: "2023",
     },
-  ] as AboutPublication[],
+  ] as Publication[],
 
   /**
    * Grouped skills. Each group renders as a row of non-clickable pills that
@@ -219,7 +223,7 @@ export const siteConfig = {
     { label: "GitHub", href: "https://github.com" },
     { label: "Google Scholar", href: "https://scholar.google.com" },
     { label: "RSS", href: "/rss.xml" },
-  ],
+  ] as Social[],
 
   /* ----------------------------------------------------------------- forms --- */
 

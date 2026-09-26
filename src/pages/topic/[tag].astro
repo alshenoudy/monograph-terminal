@@ -4,7 +4,7 @@ import PostCard from "@/components/PostCard.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { siteConfig } from "@/config/site";
+import { siteConfig } from "@/config/customize";
 import { getAllTags, getPostsByTag, visiblePosts, type Post } from "@/lib/posts";
 
 export async function getStaticPaths() {

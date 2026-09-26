@@ -4,12 +4,11 @@ Use this guide when adapting Monograph for a real blog.
 
 ## Site Settings
 
-Edit [src/config/site.ts](./src/config/site.ts) first. It is the single source of truth for the
+Edit [src/config/customize.ts](./src/config/customize.ts) first. It is the single source of truth for the
 whole site: the wordmark, default metadata, canonical domain, language and date locale, the author
 identity (role, intro, email, resume), the full CV (facts, experience, education, projects,
 publications, skills, interests), social links, navigation, and the newsletter and contact form
-settings. The home hero (`heroConfig`) and the About page (`aboutConfig`) are thin re-export
-slices of `siteConfig`, so nothing else needs editing.
+settings. Every page and component imports from this one file; nothing else needs editing.
 
 Set `siteConfig.siteUrl` before building for production. Canonical URLs, social image URLs, RSS,
 `robots.txt`, the sitemap, and JSON-LD all derive from it.

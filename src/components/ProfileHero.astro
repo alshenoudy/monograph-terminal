@@ -1,14 +1,14 @@
 ---
 import Experience from "@/components/Experience.astro";
 import LocalIcon from "@/components/LocalIcon.astro";
-import { heroConfig } from "@/config/hero";
+import { siteConfig } from "@/config/customize";
 
 /*
  * Home hero: name, role, intro, social contact links, and experience. All
- * content is read from `heroConfig`, so editing the home page content is
- * limited to that single file.
+ * content is read from `siteConfig`, so editing the home page content is
+ * limited to the single config file.
  */
-const { name, about, role, experience, resumeUrl, email, socials } = heroConfig;
+const { name, about, role, experience, resumeUrl, email, socials } = siteConfig;
 const hasResume = resumeUrl.trim().length > 0;
 
 const iconByLabel: Record<string, "envelope" | "github" | "google" | "linkedin" | "twitter-x" | undefined> = {

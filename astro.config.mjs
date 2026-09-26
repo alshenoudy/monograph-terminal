@@ -4,7 +4,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { unified } from "@astrojs/markdown-remark";
 import rehypeSlug from "rehype-slug";
-import { siteConfig } from "./src/config/site.ts";
+import { siteConfig } from "./src/config/customize.ts";
 import { codeThemes, codeDefaultColor } from "./src/config/code.ts";
 
 import mdx from "@astrojs/mdx";

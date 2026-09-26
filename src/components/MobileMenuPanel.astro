@@ -6,19 +6,6 @@ const isCurrentPath = (href: string) =>
   currentPath === href || (href !== "/" && currentPath.startsWith(href));
 ---
 
-<button
-  type="button"
-  class="icon-btn md:hidden"
-  aria-controls="mobile-menu-panel"
-  aria-expanded="false"
-  data-mobile-menu-toggle
->
-  <svg aria-hidden="true" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
-    <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
-  </svg>
-  <span class="sr-only">Open navigation menu</span>
-</button>
-
 <div
   id="mobile-menu-panel"
   class="mobile-menu-panel md:hidden"
@@ -49,7 +36,7 @@ const isCurrentPath = (href: string) =>
             <a
               href={item.href}
               aria-current={isCurrentPath(item.href) ? "page" : undefined}
-              class="block border-b border-border py-4 text-2xl font-semibold tracking-tight [font-family:var(--font-display)] aria-[current=page]:text-accent"
+              class="block border-b border-border py-4 text-base font-semibold tracking-tight [font-family:var(--font-display)] aria-[current=page]:text-accent"
             >
               {item.label}
             </a>

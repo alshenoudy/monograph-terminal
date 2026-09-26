@@ -1,6 +1,7 @@
 ---
 import { navigation, siteConfig } from "@/config/site";
-import MobileMenu from "@/components/MobileMenu.astro";
+import MobileMenuPanel from "@/components/MobileMenuPanel.astro";
+import MobileMenuToggle from "@/components/MobileMenuToggle.astro";
 import SearchDialog from "@/components/SearchDialog.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
 import { visiblePosts, type Post } from "@/lib/posts";
@@ -49,11 +50,13 @@ const isCurrentPath = (href: string) =>
         </a>
 
         <ThemeToggle />
-        <MobileMenu />
+        <MobileMenuToggle />
       </div>
     </div>
   </div>
 </header>
+
+<MobileMenuPanel />
 
 <SearchDialog posts={visiblePosts(Astro.props.posts)} />
 

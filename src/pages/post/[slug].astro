@@ -120,30 +120,7 @@ const structuredData = {
           </p>
         )}
 
-        <div class="mt-8 flex flex-wrap items-center gap-2 border-t border-border pt-6" role="group" aria-labelledby="share-heading">
-          <h2 id="share-heading" class="eyebrow mr-1">Share</h2>
-          {shareLinks.map((link) => (
-            <a
-              href={link.href}
-              target="_blank"
-              rel="noreferrer"
-              class="share-btn"
-              aria-label={`Share ${data.title} on ${link.label}`}
-            >
-              <LocalIcon name={link.icon} className="h-4 w-4" />
-            </a>
-          ))}
-          <button
-            type="button"
-            class="share-btn"
-            data-copy-link
-            data-copy-url={articleUrl}
-            aria-label={`Copy link to ${data.title}`}
-          >
-            <LocalIcon name="link-45deg" className="h-4 w-4" />
-          </button>
-          <p class="ml-1 text-xs text-muted-foreground" aria-live="polite" data-copy-status></p>
-        </div>
+        <hr class="article-header__divider" />
       </header>
 
       {data.cover && (
@@ -171,16 +148,44 @@ const structuredData = {
         </figure>
       )}
 
+      <div class="article-toc canvas">
+        <TableOfContents headings={headings} />
+      </div>
+
       <div class="article-body">
         <div class="article-body__prose prose canvas mt-12">
           <Content components={mdxComponents} />
         </div>
-        <TableOfContents headings={headings} />
       </div>
 
-      {(newer || older) && (
-        <footer class="canvas mt-16 border-t border-border pt-8">
-          <nav class="grid gap-8 sm:grid-cols-2" aria-label="Post navigation">
+      <footer class="canvas mt-16 border-t border-border pt-8">
+        <div class="article-share" role="group" aria-labelledby="share-heading">
+          <h2 id="share-heading" class="eyebrow mr-1">Share</h2>
+          {shareLinks.map((link) => (
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noreferrer"
+              class="share-btn"
+              aria-label={`Share ${data.title} on ${link.label}`}
+            >
+              <LocalIcon name={link.icon} className="h-4 w-4" />
+            </a>
+          ))}
+          <button
+            type="button"
+            class="share-btn"
+            data-copy-link
+            data-copy-url={articleUrl}
+            aria-label={`Copy link to ${data.title}`}
+          >
+            <LocalIcon name="link-45deg" className="h-4 w-4" />
+          </button>
+          <p class="ml-1 text-xs text-muted-foreground" aria-live="polite" data-copy-status></p>
+        </div>
+
+        {(newer || older) && (
+          <nav class="grid gap-8 sm:grid-cols-2 article-share__nav" aria-label="Post navigation">
             <div>
               {older && (
                 <a href={postHref(older)} class="link-title link-nudge">
@@ -202,8 +207,8 @@ const structuredData = {
               )}
             </div>
           </nav>
-        </footer>
-      )}
+        )}
+      </footer>
     </article>
 
     {related.length > 0 && (
@@ -390,6 +395,46 @@ const structuredData = {
       border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
       color: var(--accent);
       transform: translateY(-2px);
+    }
+
+    /* The inline TOC sits between the cover and the article body on narrow
+       viewports. Use the same vertical rhythm as other prose breaks so it does
+       not feel tighter or looser than the rest of the page. */
+    .article-toc {
+      margin-block: 2.5rem;
+    }
+
+    @media (min-width: 1200px) {
+      .article-toc {
+        margin-block: 0;
+      }
+    }
+
+    /* Share block sits at the end of the article on all viewports. */
+    .article-share {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Horizontal rule under the title/tags block on wide screens, where the
+       share row has moved to the bottom of the article. Hidden on narrow
+       viewports because the share row itself provides separation at the top. */
+    .article-header__divider {
+      display: none;
+      width: 100%;
+      height: 1px;
+      margin: 2rem 0 0;
+      border: 0;
+      background: var(--border);
+    }
+
+    @media (min-width: 1200px) {
+      .article-header__divider {
+        display: block;
+      }
     }
   </style>
 </BaseLayout>

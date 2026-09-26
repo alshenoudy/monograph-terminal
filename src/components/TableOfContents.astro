@@ -8,19 +8,31 @@ interface Props {
   label?: string;
 }
 
-const { headings, minDepth = 2, maxDepth = 3, label = "Navigation" } = Astro.props;
+const { headings, minDepth = 2, maxDepth = 3, label = "Table of Contents" } = Astro.props;
 
 const items = headings.filter(({ depth }) => depth >= minDepth && depth <= maxDepth);
 ---
 
 {
   items.length > 0 && (
-    <aside class="toc" aria-labelledby="toc-heading">
+    <aside class="toc" aria-labelledby="toc-heading" data-toc>
       <nav aria-label={label}>
-        <p id="toc-heading" class="toc__label">
-          {label}
-        </p>
-        <ol class="toc__list" role="list">
+        <button
+          type="button"
+          class="toc__label toc__toggle"
+          aria-expanded="false"
+          aria-controls="toc-list"
+          id="toc-heading"
+          data-toc-toggle
+        >
+          <span>{label}</span>
+          <span class="toc__chevron" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </span>
+        </button>
+        <ol id="toc-list" class="toc__list" role="list" data-toc-list>
           {items.map((heading) => (
             <li class={`toc__item toc__item--depth-${heading.depth}`}>
               <a href={`#${heading.slug}`} class="toc__link" data-toc-link data-toc-slug={heading.slug}>
@@ -35,15 +47,40 @@ const items = headings.filter(({ depth }) => depth >= minDepth && depth <= maxDe
 }
 
 <script is:inline>
-  /* Highlight the table-of-contents entry for the heading nearest the top of
-     the viewport. Progressive enhancement: navigation still works without JS. */
   (() => {
-    const toc = document.querySelector(".toc");
+    const toc = document.querySelector("[data-toc]");
     if (!toc) return;
 
+    const toggle = toc.querySelector("[data-toc-toggle]");
+    const list = toc.querySelector("[data-toc-list]");
     const links = Array.from(toc.querySelectorAll("[data-toc-link]"));
-    if (links.length === 0) return;
+    if (!toggle || !list || links.length === 0) return;
 
+    /* Collapsible on narrow viewports only. Wide breakpoints keep the TOC open
+       via CSS; the button is hidden there, so this script mainly affects the
+       single-column layout. */
+    const updateOpen = (open) => {
+      toggle.setAttribute("aria-expanded", String(open));
+      toc.classList.toggle("toc--open", open);
+    };
+
+    toggle.addEventListener("click", () => {
+      const next = toggle.getAttribute("aria-expanded") !== "true";
+      updateOpen(next);
+    });
+
+    /* Auto-close when the user jumps to a section on mobile so the article is
+       not obscured by the TOC panel. */
+    links.forEach((link) => {
+      link.addEventListener("click", () => {
+        if (window.matchMedia("(max-width: 1199px)").matches) {
+          updateOpen(false);
+        }
+      });
+    });
+
+    /* Highlight the table-of-contents entry for the heading nearest the top of
+       the viewport. Progressive enhancement: navigation still works without JS. */
     const slugs = links.map((link) => link.getAttribute("data-toc-slug")).filter(Boolean);
     const targets = slugs
       .map((slug) => document.getElementById(slug))
@@ -107,14 +144,35 @@ const items = headings.filter(({ depth }) => depth >= minDepth && depth <= maxDe
     align-content: start;
   }
 
-  .toc__label {
+  .toc__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
     margin: 0;
+    padding: 0;
+    font: inherit;
     font-family: var(--font-display);
     font-size: var(--font-size-xs);
     font-weight: 500;
     letter-spacing: 0.04em;
     text-transform: uppercase;
+    text-align: left;
     color: var(--muted-foreground);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .toc__chevron {
+    display: inline-grid;
+    place-items: center;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .toc__toggle[aria-expanded="true"] .toc__chevron {
+    transform: rotate(180deg);
   }
 
   .toc__list {
@@ -163,13 +221,22 @@ const items = headings.filter(({ depth }) => depth >= minDepth && depth <= maxDe
     .toc {
       position: fixed;
       top: 7.5rem;
-      left: max(1rem, calc((100vw - var(--layout-content)) / 2 - 17rem));
+      right: max(1rem, calc((100vw - var(--layout-content)) / 2 - 17rem));
       width: 15rem;
       max-height: calc(100vh - 6rem);
       overflow-y: auto;
       overscroll-behavior: contain;
       padding: 0 1.25rem 1rem 0.75rem;
       z-index: 10;
+    }
+
+    .toc__toggle {
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .toc__chevron {
+      display: none;
     }
 
     .toc__list {
@@ -186,13 +253,22 @@ const items = headings.filter(({ depth }) => depth >= minDepth && depth <= maxDe
     .toc {
       position: fixed;
       top: 7.5rem;
-      left: max(1rem, calc((100vw - var(--layout-content)) / 2 - 15rem));
+      right: max(1rem, calc((100vw - var(--layout-content)) / 2 - 15rem));
       width: 13rem;
       max-height: calc(100vh - 6rem);
       overflow-y: auto;
       overscroll-behavior: contain;
       padding: 0 0.75rem 1rem 0.5rem;
       z-index: 10;
+    }
+
+    .toc__toggle {
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .toc__chevron {
+      display: none;
     }
 
     .toc__list {
@@ -210,6 +286,18 @@ const items = headings.filter(({ depth }) => depth >= minDepth && depth <= maxDe
       padding: 1rem 0;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
+    }
+
+    .toc__list {
+      display: none;
+    }
+
+    .toc--open .toc__list,
+    .toc__toggle[aria-expanded="true"] + .toc__list {
+      display: grid;
+      padding-top: 0.6rem;
+      max-height: 60vh;
+      overflow-y: auto;
     }
   }
 </style>

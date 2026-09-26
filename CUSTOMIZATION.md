@@ -65,16 +65,38 @@ From there the theme handles the rest:
 - `/categories/` lists every category with its description and post count, in configured order.
 - `/category/<slug>/` is generated for each category that has at least one post.
 - The home sidebar lists the same categories with counts.
-- The post byline reads "By Author in Category", linking to both.
+- The post byline links the category; tags appear below the title.
 
 Slugs are derived from the name (`"Design Systems"` becomes `design-systems`).
 
-## Authors
+## Tags
 
-Authors come from post frontmatter — there is no separate author file. Each post carries a `name` and
-a short `role`, and the theme groups posts by name to build `/author/` and `/author/<name>/`. Keep the
-`role` string identical across a given author's posts, since the listing uses the value it last saw.
-The demo content ships with three authors.
+Tags are the second, open taxonomy. Unlike categories, they are free-form: add a `tags` array to a
+post's frontmatter with any strings you like — no registry, no build-time check.
+
+```yaml
+tags: ["design-tokens", "component-libraries"]
+```
+
+The theme handles the rest:
+
+- `/tags/` indexes every tag across published posts with counts, most used first.
+- `/tag/<slug>/` archives the posts carrying a tag, slugs derived with the same rules as categories
+  (`"Design Tokens"` becomes `design-tokens`).
+- Tags render under the article title, on feed cards (compact sidebar cards excepted), in search
+  results, and as JSON-LD `keywords`.
+- Related posts weigh shared tags after the category match.
+
+All tag surfaces render through a single `.tag` class in
+[src/styles/global.css](./src/styles/global.css) — restyle tags site-wide by editing that one rule.
+
+## Single-Author Sites
+
+Monograph is built for one person's portfolio. Authorship is site-level, not per-post:
+`siteConfig.authorName` fills the SEO and JSON-LD author fields, and the About page introduces the
+writer. Posts carry no author frontmatter. To adapt it for multiple writers, add an `author` object
+back to the post schema in [src/content.config.ts](./src/content.config.ts) and group posts with a
+`getAllAuthors` helper in [src/lib/posts.ts](./src/lib/posts.ts).
 
 ## Featured Posts
 
@@ -130,10 +152,10 @@ command palette, and [src/pages/search.astro](./src/pages/search.astro) serves t
 `/search/?q=...` results page.
 
 At build time [src/pages/search-index.json.ts](./src/pages/search-index.json.ts) generates
-`/search-index.json` from every published post. The index holds the title, excerpt, category, author,
+`/search-index.json` from every published post. The index holds the title, excerpt, category, tags,
 date, read time, and URL — never the article body. The palette fetches it the first time a query is
 typed, so pages nobody searches from pay nothing for the feature. Results are ranked in tiers: titles
-starting with the query, then titles containing it, then category matches, then excerpt and author
+starting with the query, then titles containing it, then tag and category matches, then excerpt
 matches, capped at seven. The full page renders every match.
 
 Neither surface lists anything before the first keystroke — the palette collapses to just its input,
@@ -180,7 +202,7 @@ The reusable hover classes are:
 
 | Class                                             | Effect                                                              | Used by                                                          |
 | ------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| `.link-title` + `.link-title__text`               | The heading picks up the accent while the excerpt and meta stay put | Feed entries, sidebar rows, category and author lists, prev/next |
+| `.link-title` + `.link-title__text`               | The heading picks up the accent while the excerpt and meta stay put | Feed entries, sidebar rows, category and tag lists, prev/next     |
 | `.link-sweep`                                     | Underline wipes in from the left                                    | Post byline links                                                |
 | `.nav-link`                                       | Hairline wipes in underneath; stays for the current page            | Header and footer navigation, pagination                         |
 | `.link-nudge` + `.link-nudge__arrow`              | Arrow leans toward its destination                                  | Pagination, prev/next                                            |
@@ -257,7 +279,10 @@ reading column by changing `--layout-content` rather than editing individual pag
 ## Fonts
 
 Monograph self-hosts [Geist](https://vercel.com/font) (variable weight, OFL) from
-`public/fonts/geist`, with Geist Mono for code. No font is fetched from a third party.
+`public/fonts/geist`, with Geist Mono for code. Headings use self-hosted
+[Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) (variable weight, OFL) from
+`public/fonts/space-grotesk`, applied via the `--font-display` token. No font is fetched from a
+third party.
 
 For an editorial serif look, point the display font at the bundled system-serif stack:
 

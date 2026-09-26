@@ -1,11 +1,9 @@
 ---
 title: "Observability Without a Dashboard Tax"
 excerpt: "Dashboards help when they answer real questions. They become tax when every team must maintain panels nobody uses during an incident."
-category: "Reliability"
+category: "Notes"
+tags: ["observability", "monitoring", "dashboards"]
 date: 2026-07-01
-author:
-  name: "Evan Brooks"
-  role: "Security and reliability"
 cover:
   src: "./cover.jpg"
   alt: "Blue and orange abstract background with wavy shapes"

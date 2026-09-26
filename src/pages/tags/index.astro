@@ -1,0 +1,38 @@
+---
+import { getCollection } from "astro:content";
+import SiteFooter from "@/components/SiteFooter.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { siteConfig } from "@/config/site";
+import { getAllTags, tagHref, visiblePosts } from "@/lib/posts";
+
+const allPosts = visiblePosts(await getCollection("posts"));
+const tagList = getAllTags(allPosts);
+---
+
+<BaseLayout title="Tags" description={`Every tag on ${siteConfig.name}, with post counts.`}>
+  <SiteHeader posts={allPosts} />
+  <main id="content" class="outer">
+    <div class="canvas">
+      <header class="pagehead">
+        <p class="eyebrow">Index</p>
+        <h1 class="pagehead-title">Tags</h1>
+        <p class="pagehead-description">
+          {tagList.length} {tagList.length === 1 ? "tag" : "tags"} across {allPosts.length} posts.
+        </p>
+      </header>
+
+      <p class="flex flex-wrap items-center gap-x-3 gap-y-2 text-base">
+        {
+          tagList.map((tag) => (
+            <a href={tagHref(tag.name)} class="tag tag--row">
+              #{tag.name}
+              <span class="tag__count">{tag.count}</span>
+            </a>
+          ))
+        }
+      </p>
+    </div>
+  </main>
+  <SiteFooter />
+</BaseLayout>

@@ -1,11 +1,9 @@
 ---
 title: "A Small Incident Review Template for Busy Teams"
 excerpt: "A lightweight review format that helps teams learn from outages without turning every incident into a courtroom."
-category: "Reliability"
+category: "Articles"
+tags: ["incident-review", "postmortems", "on-call"]
 date: 2026-07-03
-author:
-  name: "Evan Brooks"
-  role: "Security and reliability"
 cover:
   src: "./cover.jpg"
   alt: "Purple, white, and orange abstract light"

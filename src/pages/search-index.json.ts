@@ -1,5 +1,5 @@
 import { getCollection } from "astro:content";
-import { formatDate, postHref, readingLabel, visiblePosts } from "@/lib/posts";
+import { formatDate, postHref, readingLabel, tagHref, visiblePosts } from "@/lib/posts";
 
 /**
  * Static search index consumed by the header command palette. It holds post
@@ -12,7 +12,7 @@ export async function GET() {
     title: post.data.title,
     excerpt: post.data.excerpt,
     href: postHref(post),
-    author: post.data.author.name,
+    tags: post.data.tags.map((tag) => ({ name: tag, href: tagHref(tag) })),
     category: post.data.category,
     date: formatDate(post.data.date),
     reading: readingLabel(post),

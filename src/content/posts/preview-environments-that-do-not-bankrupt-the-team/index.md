@@ -1,11 +1,9 @@
 ---
 title: "Preview Environments That Do Not Bankrupt the Team"
 excerpt: "A lighter pattern for branch previews that keeps feedback fast without creating a cloud bill nobody wants to own."
-category: "Cloud"
+category: "Articles"
+tags: ["preview-environments", "cloud-cost", "developer-experience"]
 date: 2026-07-11
-author:
-  name: "Iris Novak"
-  role: "Cloud and platform"
 cover:
   src: "./cover.jpg"
   alt: "Blue, orange, and yellow abstract wallpaper"

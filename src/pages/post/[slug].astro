@@ -11,7 +11,6 @@ import CodeGroup from "@/components/mdx/CodeGroup.astro";
 import CodeGroupItem from "@/components/mdx/CodeGroupItem.astro";
 import { siteConfig } from "@/config/site";
 import {
-  authorSlug,
   categoryHref,
   formatDate,
   getAdjacent,
@@ -19,6 +18,7 @@ import {
   postHref,
   postSlug,
   readingLabel,
+  tagHref,
   visiblePosts,
   type Post,
 } from "@/lib/posts";
@@ -42,7 +42,6 @@ const mdxComponents = { Callout, CodeGroup, CodeGroupItem };
 const data = post.data;
 const related = getRelated(allPosts, post);
 const { newer, older } = getAdjacent(allPosts, post);
-const authorHref = `/author/${authorSlug(data.author.name)}/`;
 const articleUrl = new URL(postHref(post), siteConfig.siteUrl).toString();
 const socialImage = data.cover
   ? new URL(data.cover.src.src, siteConfig.siteUrl).toString()
@@ -74,8 +73,9 @@ const structuredData = {
   image: socialImage,
   datePublished: data.date.toISOString(),
   dateModified: (data.updatedDate ?? data.date).toISOString(),
-  author: { "@type": "Person", name: data.author.name },
+  author: { "@type": "Person", name: siteConfig.authorName },
   publisher: { "@type": "Organization", name: siteConfig.authorName },
+  keywords: data.tags.join(", "),
   mainEntityOfPage: articleUrl,
 };
 ---
@@ -93,7 +93,7 @@ const structuredData = {
       <header class="canvas pt-10 md:pt-14">
         <p class="meta post-meta">
           <span class="post-meta__byline">
-            By <a href={authorHref} class="link-sweep post-meta__link">{data.author.name}</a> in{" "}
+            in{" "}
             <a href={categoryHref(data.category)} class="link-sweep post-meta__link">{data.category}</a>
           </span>
           <span class="post-meta__dates">
@@ -104,6 +104,14 @@ const structuredData = {
 
         <h1 class="article-title">{data.title}</h1>
         <p class="article-excerpt">{data.excerpt}</p>
+
+        {data.tags.length > 0 && (
+          <p class="post-tags">
+            {data.tags.map((tag) => (
+              <a href={tagHref(tag)} class="tag">{tag}</a>
+            ))}
+          </p>
+        )}
 
         {data.updatedDate && (
           <p class="meta mt-5">
@@ -276,6 +284,13 @@ const structuredData = {
 
     .post-meta__link {
       color: var(--foreground);
+    }
+
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.15rem 0;
+      margin: 0.9rem 0 0;
     }
 
     /* Mirrors `.meta > *`: the dot only takes its 2px box inside a flex item. */

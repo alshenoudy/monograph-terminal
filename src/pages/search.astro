@@ -4,14 +4,14 @@ import SiteFooter from "@/components/SiteFooter.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { siteConfig } from "@/config/site";
-import { formatDate, postHref, readingLabel, visiblePosts } from "@/lib/posts";
+import { formatDate, postHref, readingLabel, tagHref, visiblePosts } from "@/lib/posts";
 
 const allPosts = visiblePosts(await getCollection("posts"));
 const searchItems = allPosts.map((post) => ({
   title: post.data.title,
   excerpt: post.data.excerpt,
   href: postHref(post),
-  author: post.data.author.name,
+  tags: post.data.tags.map((tag) => ({ name: tag, href: tagHref(tag) })),
   category: post.data.category,
   date: formatDate(post.data.date),
   reading: readingLabel(post),
@@ -38,7 +38,7 @@ const searchItems = allPosts.map((post) => ({
               name="q"
               type="search"
               class="field"
-              placeholder="Title, category, or author..."
+              placeholder="Title, category, or tag..."
               autocomplete="off"
               data-search-page-input
             />
@@ -74,7 +74,7 @@ const searchItems = allPosts.map((post) => ({
         })[character]);
 
       const matches = (item, query) =>
-        [item.title, item.excerpt, item.author, item.category]
+        [item.title, item.excerpt, item.category, ...item.tags.map((tag) => tag.name)]
           .join(" ")
           .toLowerCase()
           .includes(query);
@@ -98,6 +98,7 @@ const searchItems = allPosts.map((post) => ({
                   <h2 class="search-page-title link-title__text">${escapeHtml(item.title)}</h2>
                   <p class="search-page-excerpt">${escapeHtml(item.excerpt)}</p>
                   <p class="meta mt-4"><span class="meta-accent">${escapeHtml(item.category)}</span><time>${escapeHtml(item.date)}</time><span>${escapeHtml(item.reading)}</span></p>
+                  ${item.tags.length > 0 ? `<p class="meta mt-2">${item.tags.map((tag) => `<a href="${escapeHtml(tag.href)}" class="tag">${escapeHtml(tag.name)}</a>`).join("")}</p>` : ""}
                 </a>
               </article>
             `,

@@ -1,6 +1,6 @@
 ---
 import { navigation, siteConfig } from "@/config/site";
-import { formatDate, postHref, readingLabel, visiblePosts, type Post } from "@/lib/posts";
+import { formatDate, postHref, readingLabel, tagHref, visiblePosts, type Post } from "@/lib/posts";
 
 interface Props {
   posts: Post[];
@@ -13,7 +13,7 @@ const searchFallback = posts.slice(0, 12).map((post) => ({
   title: post.data.title,
   excerpt: post.data.excerpt,
   href: postHref(post),
-  author: post.data.author.name,
+  tags: post.data.tags.map((tag) => ({ name: tag, href: tagHref(tag) })),
   category: post.data.category,
   date: formatDate(post.data.date),
   reading: readingLabel(post),
@@ -113,7 +113,7 @@ const isCurrentPath = (href: string) =>
           name="q"
           type="search"
           class="search-input"
-          placeholder="Search posts, categories, authors…"
+          placeholder="Search posts, categories, tags…"
           autocomplete="off"
           enterkeyhint="search"
           data-search-input
@@ -128,7 +128,7 @@ const isCurrentPath = (href: string) =>
       <div class="search-body">
         <div class="search-body-head">
           <p class="eyebrow" data-search-heading></p>
-          <p id="site-search-summary" class="text-xs text-muted-foreground" data-search-summary aria-live="polite"></p>
+          <p id="site-search-summary" class="text-xs text-muted-foreground [font-family:var(--font-display)]" data-search-summary aria-live="polite"></p>
         </div>
         <div class="search-results" data-search-results></div>
       </div>
@@ -168,7 +168,7 @@ const isCurrentPath = (href: string) =>
             <a
               href={item.href}
               aria-current={isCurrentPath(item.href) ? "page" : undefined}
-              class="block border-b border-border py-4 text-2xl font-semibold tracking-tight aria-[current=page]:text-accent"
+              class="block border-b border-border py-4 text-2xl font-semibold tracking-tight [font-family:var(--font-display)] aria-[current=page]:text-accent"
             >
               {item.label}
             </a>
@@ -232,15 +232,16 @@ const isCurrentPath = (href: string) =>
       })[character]);
 
     /* Lower is better: an exact title prefix beats a title match, which beats a
-       category match, which beats a hit in the excerpt or author name. */
+       tag or category match, which beats a hit in the excerpt. */
     const rank = (item, query) => {
       const title = item.title.toLowerCase();
       const category = (item.category || "").toLowerCase();
-      const supporting = [item.excerpt, item.author].join(" ").toLowerCase();
+      const tags = (item.tags || []).map((tag) => tag.name.toLowerCase());
+      const supporting = [item.excerpt].join(" ").toLowerCase();
 
       if (title.startsWith(query)) return 0;
       if (title.includes(query)) return 1;
-      if (category.includes(query)) return 2;
+      if (tags.some((tag) => tag.includes(query)) || category.includes(query)) return 2;
       if (supporting.includes(query)) return 3;
       return Number.POSITIVE_INFINITY;
     };
@@ -249,6 +250,7 @@ const isCurrentPath = (href: string) =>
       <a href="${escapeHtml(item.href)}" class="search-result">
         <span class="search-result-title">${escapeHtml(item.title)}</span>
         <span class="search-result-meta">${escapeHtml(item.category || "")} &middot; ${escapeHtml(item.date)} &middot; ${escapeHtml(item.reading || "")}</span>
+        ${(item.tags || []).length > 0 ? `<span class="search-result-tags">${item.tags.map((tag) => `<span class="tag">${escapeHtml(tag.name)}</span>`).join("")}</span>` : ""}
       </a>
     `;
 
@@ -287,7 +289,7 @@ const isCurrentPath = (href: string) =>
       results.innerHTML =
         matches.length > 0
           ? matches.map(resultMarkup).join("")
-          : `<p class="search-empty">No posts match that yet. Try a title, topic, or author.</p>`;
+          : `<p class="search-empty">No posts match that yet. Try a title, topic, or tag.</p>`;
     };
 
     const open = () => {
@@ -541,6 +543,7 @@ const isCurrentPath = (href: string) =>
     outline: none;
     padding: 0;
     font: inherit;
+    font-family: var(--font-display);
     font-size: 1.0625rem;
   }
 
@@ -605,6 +608,7 @@ const isCurrentPath = (href: string) =>
   .search-results :global(.search-result-title) {
     display: block;
     overflow: hidden;
+    font-family: var(--font-display);
     font-size: 0.95rem;
     font-weight: 600;
     line-height: 1.35;
@@ -616,15 +620,24 @@ const isCurrentPath = (href: string) =>
     display: block;
     margin-top: 0.2rem;
     color: var(--muted-foreground);
+    font-family: var(--font-display);
     font-size: 0.75rem;
     letter-spacing: 0.03em;
     text-transform: uppercase;
+  }
+
+  .search-results :global(.search-result-tags) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0;
+    margin-top: 0.35rem;
   }
 
   .search-results :global(.search-empty) {
     margin: 0;
     padding: 1.75rem 0.75rem;
     color: var(--muted-foreground);
+    font-family: var(--font-display);
     font-size: 0.9375rem;
   }
 
@@ -635,6 +648,7 @@ const isCurrentPath = (href: string) =>
     border-top: 1px solid var(--border);
     padding: 0.6rem 1rem;
     color: var(--muted-foreground);
+    font-family: var(--font-display);
     font-size: 0.7rem;
   }
 
@@ -653,7 +667,8 @@ const isCurrentPath = (href: string) =>
     background: var(--muted);
     color: var(--foreground);
     padding: 0 0.25rem;
-    font-family: var(--font-mono);
+    font-family: var(--font-display);
+    font-weight: 600;
     font-size: 0.62rem;
     border-radius: var(--radius-xs);
   }

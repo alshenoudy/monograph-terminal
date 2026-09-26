@@ -1,11 +1,9 @@
 ---
 title: "Passkeys Made the Login Page Boring"
 excerpt: "The best authentication work often removes drama: fewer resets, fewer phishing paths, and fewer choices users should never have to make."
-category: "Security"
+category: "Notes"
+tags: ["passkeys", "authentication", "ux"]
 date: 2026-07-09
-author:
-  name: "Evan Brooks"
-  role: "Security and reliability"
 cover:
   src: "./cover.jpg"
   alt: "Deep blue and purple flowing abstract shapes"

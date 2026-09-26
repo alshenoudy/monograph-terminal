@@ -14,15 +14,15 @@ Monograph is a free Astro theme for essays, notes, and long-form writing. It is 
 ## Features
 
 - Text-first front page: a large latest post, a whitespace-separated feed with no thumbnails, and a sticky sidebar holding the about blurb, a subscribe form, featured posts, and categories with post counts
-- Article pages with a single 720px reading column, a byline that reads "By author in category", a share row above the feature image, copy-link, previous/next navigation, and related posts
-- Categories as the only taxonomy: one short configured list, a `/categories/` index with descriptions and counts, and a generated archive per category
-- Author, archive, search, about, contact, privacy, and 404 pages, plus RSS, sitemap, and `robots.txt`
+- Article pages with a single 720px reading column, a byline with category and tags, a share row above the feature image, copy-link, previous/next navigation, and related posts
+- Two-level taxonomy: a short configured list of categories (`/categories/` index with descriptions and counts, one generated archive per category) plus free-form per-post tags with a `/tags/` index and a generated archive per tag
+- Archive, search, about, contact, privacy, and 404 pages, plus RSS, sitemap, and `robots.txt`
 - Built-in client-side search with a keyboard-friendly command palette and a dedicated results page — no search service and no database, and nothing listed until the first keystroke
 - System-aware light and dark modes behind a header toggle switch, applied before first paint with the reader's choice remembered
 - Read time calculated from the post body at build time, so nothing to maintain by hand
 - Markdown and MDX content powered by Astro content collections, with dual light/dark syntax-highlighted code blocks (plus a copy button), styled lists, and blockquotes
 - Reusable MDX content components — `Callout` (note/tip/warning/danger) and tabbed `CodeGroup` code samples — available in any post with no imports
-- Frontmatter validation for titles, excerpts, categories, dates, authors, covers, featured, and drafts
+- Frontmatter validation for titles, excerpts, categories, dates, covers, featured, and drafts
 - Sticky header that hides while scrolling down and slides back in on the way up
 - Restrained hover motion on one easing curve: titles pick up the accent, inline links wipe an underline in, arrows lean toward their destination, and icon buttons lift
 - Optional feature images, capped in height and shown on the post only, never in a feed
@@ -72,12 +72,10 @@ Posts live in [src/content/posts](./src/content/posts). Each post is a folder co
 ---
 title: "Design Tokens That Survive Product Growth"
 excerpt: "Tokens work when they describe decisions."
-category: "Design Systems" # must match src/config/categories.ts
+category: "Articles" # must match src/config/categories.ts
+tags: ["design-tokens", "component-libraries"] # optional, free-form
 date: 2026-07-05
 updatedDate: 2026-07-11 # optional
-author:
-  name: "Leah Morgan"
-  role: "Design systems and craft"
 cover: # optional; shown on the post, never in the feed
   src: "./cover.jpg"
   alt: "Soft gradient mesh"
@@ -91,10 +89,8 @@ draft: false
 Read time is calculated from the body at build time. The schema in
 [src/content.config.ts](./src/content.config.ts) is enforced, so a typo fails the build rather than
 shipping a broken page, and `category` must match an entry in
-[src/config/categories.ts](./src/config/categories.ts).
-
-Authors come from frontmatter too: posts sharing a `name` are grouped into an author archive
-automatically.
+[src/config/categories.ts](./src/config/categories.ts). Tags are free-form — any string works, and
+each tag gets an archive page at `/tag/<slug>/`.
 
 ## Routes
 
@@ -105,14 +101,15 @@ automatically.
 | `/post/<slug>/`                                                 | Article                        |
 | `/categories/`                                                  | Category index with counts     |
 | `/category/<slug>/`                                             | Posts in one category          |
-| `/author/`, `/author/<name>/`                                   | Author index and archive       |
+| `/tags/`                                                        | Tag index with counts          |
+| `/tag/<slug>/`                                                  | Posts with one tag             |
 | `/search/`                                                      | Full search page (`?q=...`)    |
 | `/about/`, `/contact/`, `/privacy/`                             | Starter static pages           |
 | `/rss.xml`, `/sitemap.xml`, `/robots.txt`, `/search-index.json` | Feeds and generated endpoints  |
 
 ## Customization
 
-See [CUSTOMIZATION.md](./CUSTOMIZATION.md) for site settings, navigation, categories, authors, the
+See [CUSTOMIZATION.md](./CUSTOMIZATION.md) for site settings, navigation, categories, tags, the
 newsletter and contact forms, search, reading mode, motion, theme tokens, fonts, and icons.
 
 ## Support

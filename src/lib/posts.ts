@@ -5,8 +5,8 @@ import { siteConfig } from "@/config/site";
 export type Post = CollectionEntry<"posts">;
 export { categories, categorySlug, type Category };
 
-export const authorSlug = (author: string) =>
-  author
+export const tagSlug = (tag: string) =>
+  tag
     .toLowerCase()
     .replace(/&/g, "and")
     .replace(/[^a-z0-9\s-]/g, "")
@@ -14,6 +14,8 @@ export const authorSlug = (author: string) =>
     .replace(/\s+/g, "-");
 
 export const categoryHref = (category: string) => `/category/${categorySlug(category)}/`;
+
+export const tagHref = (tag: string) => `/tag/${tagSlug(tag)}/`;
 
 export const postSlug = (post: Post) => post.id.replace(/\/index$/, "");
 
@@ -56,14 +58,38 @@ export const getCategoryList = (posts: Post[]) => {
     .filter((entry) => entry.count > 0);
 };
 
+/** All tags across visible posts, by use count, then alphabetically. */
+export const getAllTags = (posts: Post[]) => {
+  const counts = new Map<string, number>();
+
+  for (const post of visiblePosts(posts)) {
+    for (const tag of post.data.tags) {
+      counts.set(tag, (counts.get(tag) ?? 0) + 1);
+    }
+  }
+
+  return Array.from(counts.entries())
+    .map(([name, count]) => ({ name, slug: tagSlug(name), count }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+};
+
+export const getPostsByTag = (posts: Post[], tag: string) =>
+  visiblePosts(posts).filter((post) =>
+    post.data.tags.some((candidate) => tagSlug(candidate) === tagSlug(tag)),
+  );
+
 export const getRelated = (posts: Post[], current: Post, limit = 3) =>
   visiblePosts(posts)
     .filter((post) => post.id !== current.id)
     .sort((a, b) => {
-      const sameCategory =
+      const currentTags = new Set(current.data.tags.map(tagSlug));
+      const sharedTags = (post: Post) =>
+        post.data.tags.filter((tag) => currentTags.has(tagSlug(tag))).length;
+      const score =
         Number(b.data.category === current.data.category) -
-        Number(a.data.category === current.data.category);
-      return sameCategory || byNewest(a, b);
+        Number(a.data.category === current.data.category) ||
+        sharedTags(b) - sharedTags(a);
+      return score || byNewest(a, b);
     })
     .slice(0, limit);
 
@@ -77,24 +103,6 @@ export const getAdjacent = (posts: Post[], current: Post) => {
     older: index >= 0 && index < ordered.length - 1 ? ordered[index + 1] : undefined,
   };
 };
-
-export const getAllAuthors = (posts: Post[]) =>
-  Array.from(
-    visiblePosts(posts)
-      .reduce((authors, post) => {
-        const slug = authorSlug(post.data.author.name);
-        const current = authors.get(slug);
-        authors.set(slug, {
-          name: post.data.author.name,
-          role: post.data.author.role,
-          posts: [...(current?.posts ?? []), post],
-        });
-        return authors;
-      }, new Map<string, { name: string; role: string; posts: Post[] }>())
-      .entries(),
-  )
-    .map(([slug, author]) => ({ slug, ...author }))
-    .sort((a, b) => b.posts.length - a.posts.length || a.name.localeCompare(b.name));
 
 export const formatDate = (date: Date, style: "short" | "long" = "short") =>
   new Intl.DateTimeFormat(siteConfig.dateLocale, {

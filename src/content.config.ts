@@ -11,14 +11,15 @@ const posts = defineCollection({
       excerpt: z.string(),
       /** Must match one of the entries in src/config/categories.ts. */
       category: z.enum(categories),
+      /**
+       * Optional free-form topics. Unlike categories, tags are open: any value
+       * works, and the build does not check them against a list.
+       */
+      tags: z.array(z.string()).default([]),
       date: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
-      author: z.object({
-        name: z.string(),
-        role: z.string(),
-      }),
       /**
-       * Optional feature image. Monograph's post feeds are deliberately
+       * Feature image. Monograph's post feeds are deliberately
        * text-only, so a cover is only ever shown on the post itself.
        */
       cover: z

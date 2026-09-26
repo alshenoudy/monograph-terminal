@@ -1,12 +1,10 @@
 ---
 title: "What Product Teams Should Log by Default"
 excerpt: "Useful logs describe decisions, not just events. Start with the moments someone will need to explain later."
-category: "Reliability"
+category: "Notes"
+tags: ["logging", "observability", "product"]
 date: 2026-07-04
 updatedDate: 2026-07-15
-author:
-  name: "Evan Brooks"
-  role: "Security and reliability"
 cover:
   src: "./cover.jpg"
   alt: "Abstract flowing waves of purple and white light"

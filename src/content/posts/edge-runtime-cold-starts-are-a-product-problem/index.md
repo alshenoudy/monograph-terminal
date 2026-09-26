@@ -1,12 +1,10 @@
 ---
 title: "Edge Runtime Cold Starts Are a Product Problem"
 excerpt: "A practical look at how small latency spikes become trust issues, and what engineering teams can do before the dashboard turns red."
-category: "Cloud"
+category: "Notes"
+tags: ["performance", "edge-compute", "latency"]
 date: 2026-07-14
 updatedDate: 2026-07-15
-author:
-  name: "Iris Novak"
-  role: "Cloud and platform"
 cover:
   src: "./cover.jpg"
   alt: "Blurry blue and white abstract background"

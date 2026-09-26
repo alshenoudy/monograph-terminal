@@ -1,5 +1,5 @@
 ---
-import { formatDate, postHref, readingLabel, type Post } from "@/lib/posts";
+import { formatDate, postHref, readingLabel, tagHref, type Post } from "@/lib/posts";
 
 interface Props {
   post: Post;
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const { post, variant = "feed", headingLevel = "h2", dateLabel } = Astro.props;
-const { title, excerpt, date, author } = post.data;
+const { title, excerpt, date, tags } = post.data;
 const href = postHref(post);
 const Heading = headingLevel;
 const isoDate = date.toISOString();
@@ -38,12 +38,16 @@ const readableDate = formatDate(date);
     <Heading class="card-title link-title__text">{title}</Heading>
     <p class="card-excerpt">{excerpt}</p>
 
+    {variant !== "compact" && tags.length > 0 && (
+      <p class="card-tags">
+        {tags.map((tag) => (
+          <a href={tagHref(tag)} class="tag">{tag}</a>
+        ))}
+      </p>
+    )}
+
     <p class="meta card-footer">
-      {variant === "lead" ? (
-        <span>{author.name}</span>
-      ) : (
-        <time class="meta-accent" datetime={isoDate}>{readableDate}</time>
-      )}
+      <time class="meta-accent" datetime={isoDate}>{readableDate}</time>
       {variant !== "compact" && <span>{readingLabel(post)}</span>}
     </p>
   </a>
@@ -69,6 +73,13 @@ const readableDate = formatDate(date);
 
   .card-footer {
     margin: 1rem 0 0;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0;
+    margin: 0.8rem 0 0;
   }
 
   .card-toprow {

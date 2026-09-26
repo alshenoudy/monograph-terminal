@@ -251,25 +251,18 @@
   }
 
   /* ---------------------------------------------------------------- article ---
-   * Post page body: prose column plus a sticky table of contents on wide
-   * screens, stacked on narrow ones.
+   * The prose column keeps its original centered position. The table of
+   * contents is a floating panel anchored to the right edge of the viewport,
+   * so it never pushes the reading column off-center.
    */
 
   .article-body {
-    display: grid;
-    gap: 1.5rem;
-    align-items: start;
+    position: relative;
   }
 
-  @media (min-width: 1200px) {
-    .article-body {
-      grid-template-columns: minmax(0, 1fr) 13rem;
-      gap: 3rem;
-    }
-
-    .article-body__prose {
-      min-width: 0;
-    }
+  .article-body__prose {
+    position: relative;
+    z-index: 1;
   }
 
   /* Home sidebar: sticky beside the feed on wide screens, stacked below it on

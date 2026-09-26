@@ -150,16 +150,42 @@ const items = headings.filter(({ depth }) => depth >= minDepth && depth <= maxDe
     font-weight: 500;
   }
 
-  @media (min-width: 1200px) {
+  @media (min-width: 1400px) {
     .toc {
-      position: sticky;
+      position: fixed;
       top: 4.5rem;
+      right: 0;
+      width: 16rem;
       max-height: calc(100vh - 6rem);
       overflow-y: auto;
       overscroll-behavior: contain;
+      padding: 0 1.5rem 1rem 1rem;
+      z-index: 10;
     }
 
-    /* A subtle left rule lines the TOC up with the reading column edge. */
+    .toc__list {
+      border-left: 1px solid var(--border);
+      padding-left: 0.75rem;
+    }
+
+    .toc__item--depth-3 .toc__link {
+      padding-left: 0;
+    }
+  }
+
+  @media (min-width: 1200px) and (max-width: 1399px) {
+    .toc {
+      position: fixed;
+      top: 4.5rem;
+      right: 0;
+      width: 14rem;
+      max-height: calc(100vh - 6rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 0 1rem 1rem 0.75rem;
+      z-index: 10;
+    }
+
     .toc__list {
       border-left: 1px solid var(--border);
       padding-left: 0.75rem;

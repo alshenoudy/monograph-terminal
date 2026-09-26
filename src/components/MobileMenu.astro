@@ -1,0 +1,139 @@
+---
+import { navigation, siteConfig } from "@/config/site";
+
+const currentPath = Astro.url.pathname;
+const isCurrentPath = (href: string) =>
+  currentPath === href || (href !== "/" && currentPath.startsWith(href));
+---
+
+<button
+  type="button"
+  class="icon-btn md:hidden"
+  aria-controls="mobile-menu-panel"
+  aria-expanded="false"
+  data-mobile-menu-toggle
+>
+  <svg aria-hidden="true" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+    <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+  </svg>
+  <span class="sr-only">Open navigation menu</span>
+</button>
+
+<div
+  id="mobile-menu-panel"
+  class="mobile-menu-panel md:hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Navigation menu"
+  hidden
+>
+  <div class="flex items-center justify-between gap-6 border-b border-border px-6 py-4">
+    <a href="/" class="wordmark">{siteConfig.name}</a>
+    <button
+      type="button"
+      class="icon-btn"
+      data-mobile-menu-close
+      aria-label="Close navigation menu"
+    >
+      <svg aria-hidden="true" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+        <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+
+  <nav class="px-6 py-4" aria-label="Mobile navigation">
+    <ul>
+      {
+        navigation.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isCurrentPath(item.href) ? "page" : undefined}
+              class="block border-b border-border py-4 text-2xl font-semibold tracking-tight [font-family:var(--font-display)] aria-[current=page]:text-accent"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</div>
+
+<script is:inline>
+  (() => {
+    const menuButton = document.querySelector("[data-mobile-menu-toggle]");
+    const menuPanel = document.getElementById("mobile-menu-panel");
+
+    if (!menuButton || !menuPanel) return;
+
+    const menuClose = menuPanel.querySelector("[data-mobile-menu-close]");
+    const desktopMedia = window.matchMedia("(min-width: 768px)");
+    const focusableSelector =
+      'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    let inerted = [];
+
+    const setMenuOpen = (isOpen) => {
+      menuPanel.hidden = !isOpen;
+      menuButton.setAttribute("aria-expanded", String(isOpen));
+      document.documentElement.classList.toggle("has-open-menu", isOpen);
+
+      if (isOpen) {
+        inerted = Array.from(document.body.children).filter(
+          (element) => element !== menuPanel && !element.inert,
+        );
+        inerted.forEach((element) => {
+          element.inert = true;
+        });
+        window.requestAnimationFrame(() => menuClose?.focus());
+      } else {
+        inerted.forEach((element) => {
+          element.inert = false;
+        });
+        inerted = [];
+      }
+    };
+
+    menuButton.addEventListener("click", () => {
+      setMenuOpen(menuButton.getAttribute("aria-expanded") !== "true");
+    });
+
+    menuPanel.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => setMenuOpen(false));
+    });
+
+    menuClose?.addEventListener("click", () => {
+      setMenuOpen(false);
+      menuButton.focus();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (menuPanel.hidden) return;
+
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuButton.focus();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      const focusable = Array.from(menuPanel.querySelectorAll(focusableSelector));
+      const first = focusable[0];
+      const last = focusable.at(-1);
+      if (!first || !last) return;
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    desktopMedia.addEventListener("change", (event) => {
+      if (event.matches && !menuPanel.hidden) setMenuOpen(false);
+    });
+  })();
+</script>

@@ -26,7 +26,7 @@ const tagList = getAllTags(allPosts);
         {
           tagList.map((tag) => (
             <a href={tagHref(tag.name)} class="tag tag--row">
-              #{tag.name}
+              {tag.name}
               <span class="tag__count">{tag.count}</span>
             </a>
           ))

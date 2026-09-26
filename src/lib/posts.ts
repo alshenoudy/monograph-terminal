@@ -87,8 +87,7 @@ export const getRelated = (posts: Post[], current: Post, limit = 3) =>
         post.data.tags.filter((tag) => currentTags.has(tagSlug(tag))).length;
       const score =
         Number(b.data.category === current.data.category) -
-        Number(a.data.category === current.data.category) ||
-        sharedTags(b) - sharedTags(a);
+          Number(a.data.category === current.data.category) || sharedTags(b) - sharedTags(a);
       return score || byNewest(a, b);
     })
     .slice(0, limit);

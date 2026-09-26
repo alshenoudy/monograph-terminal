@@ -1,10 +1,10 @@
 ---
 import { getCollection } from "astro:content";
 import Experience from "@/components/Experience.astro";
-import Prompt from "@/components/Prompt.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { heroConfig } from "@/config/hero";
 import { siteConfig } from "@/config/site";
 import { visiblePosts } from "@/lib/posts";
 
@@ -19,7 +19,6 @@ const allPosts = visiblePosts(await getCollection("posts"));
   <main id="content" class="outer">
     <div class="canvas">
       <header class="pagehead">
-        <Prompt />
         <h1 class="pagehead-title">{siteConfig.name}</h1>
         <p class="pagehead-description">{siteConfig.about}</p>
       </header>
@@ -46,7 +45,7 @@ const allPosts = visiblePosts(await getCollection("posts"));
         </p>
 
         <h2>Experience</h2>
-        <Experience />
+        <Experience experience={heroConfig.experience} />
 
         <h2>Get in touch</h2>
         <p>

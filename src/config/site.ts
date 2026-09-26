@@ -1,57 +1,33 @@
+import { heroConfig } from "./hero";
+
 export const siteConfig = {
   /** Wordmark shown in the header and footer. Monograph uses text, never a logo image. */
-  name: "Monograph",
-  tagline: "❯ whoami",
-  title: "Monograph - A minimal Astro blog theme",
+  name: heroConfig.name,
+  /** Rendered by Prompt as `❯ {tagline}`. */
+  tagline: `❯ ${heroConfig.tagline}`,
+  title: `${heroConfig.name} - A minimal Astro blog theme`,
   description:
     "A text-first Astro theme for essays, notes, and long-form writing, with a command-palette search and a light/dark reading mode.",
   siteUrl: "https://monograph.xocoweb.workers.dev",
   authorName: "Andrei Alba",
-  email: "hello@example.com",
+  /** Contact email shared by the hero and the contact page. */
+  email: heroConfig.email,
   language: "en",
   dateLocale: "en-US",
   locale: "en_US",
   socialImage: "/og-image.png",
   /** Intro paragraph in the home hero. */
-  about:
-    "Monograph is a reading-first Astro theme. Notes on building software, published when there is something worth saying.",
+  about: heroConfig.about,
   /**
-   * Compact CV block rendered in the home hero and on the About page. `facts`
-   * are label→value rows (an optional `href` turns the value into a link);
-   * `experience` feeds the Experience component; leave either array empty
-   * to drop that section entirely.
+   * Compact CV block rendered in the home hero and on the About page. Kept
+   * here so existing pages can import `siteConfig.cv` while the hero uses
+   * `heroConfig` as the single source of truth.
    */
   cv: {
-    role: "Writer & software engineer",
-    facts: [
-      { label: "now", value: "Writing here and shipping Monograph" },
-      { label: "prev", value: "Platform teams, 2019—2026", href: "/about/" },
-      { label: "focus", value: "design systems, web performance, developer tools" },
-    ],
-    experience: [
-      {
-        period: "2026 — Now",
-        title: "Staff Engineer",
-        position: "Meridian Labs",
-        description:
-          "Own the design-system platform every product team builds on: tokens, primitives, docs, and the migration path off the legacy kit.",
-      },
-      {
-        period: "2019 — 2026",
-        title: "Senior Engineer",
-        position: "Platform teams, Northwind",
-        description:
-          "Led the rebuild of the publishing pipeline. Cut p95 render time by 60% and made deploys boring.",
-      },
-      {
-        period: "2016 — 2019",
-        title: "Frontend Engineer",
-        position: "Studio Mono",
-        description:
-          "Shipped marketing and editorial sites for clients, and learned to write markup that survives a redesign.",
-      },
-    ],
-    resumeUrl: "",
+    role: heroConfig.role,
+    facts: heroConfig.facts,
+    experience: heroConfig.experience,
+    resumeUrl: heroConfig.resumeUrl,
   },
   /**
    * Both forms below ship enabled with an empty `action`, which makes them fully
@@ -60,7 +36,7 @@ export const siteConfig = {
    * real submissions, or set `enabled: false` to disable the controls outright.
    */
   newsletter: {
-    enabled: true,
+    enabled: false,
     action: "",
     method: "post",
     emailFieldName: "email",
@@ -73,12 +49,7 @@ export const siteConfig = {
     method: "post",
     responseTime: "Replies usually go out within two business days.",
   },
-  socials: [
-    { label: "Instagram", href: "https://instagram.com" },
-    { label: "TikTok", href: "https://www.tiktok.com" },
-    { label: "YouTube", href: "https://www.youtube.com" },
-    { label: "RSS", href: "/rss.xml" },
-  ],
+  socials: heroConfig.socials,
 };
 
 /** Header navigation. Add or remove entries freely; the header renders them in order. */

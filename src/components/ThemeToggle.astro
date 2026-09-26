@@ -1,0 +1,36 @@
+---
+/*
+ * Theme switch button. The actual theme application and persistence logic lives
+ * in BaseLayout.astro's inline script. This component only renders the control
+ * and keeps aria-checked / aria-label in sync with the active mode.
+ */
+---
+
+<button
+  type="button"
+  class="theme-switch ml-1"
+  role="switch"
+  aria-checked="false"
+  data-theme-toggle
+  aria-label="Switch to dark mode"
+>
+  <span class="theme-switch__knob" aria-hidden="true">
+    <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M12 4V2M12 22v-2M4 12H2M22 12h-2M5 5 3.5 3.5M20.5 20.5 19 19M19 5l1.5-1.5M3.5 20.5 5 19"
+        stroke="currentColor"
+        stroke-width="2.25"
+        stroke-linecap="round"
+      />
+      <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2.25" />
+    </svg>
+    <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M20 14.2A7.4 7.4 0 0 1 9.8 4a8.6 8.6 0 1 0 10.2 10.2Z"
+        stroke="currentColor"
+        stroke-width="2.25"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </span>
+</button>

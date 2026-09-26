@@ -94,18 +94,18 @@ each tag gets an archive page at `/tag/<slug>/`.
 
 ## Routes
 
-| Route                                                           | Page                           |
-| --------------------------------------------------------------- | ------------------------------ |
-| `/`                                                             | CV/About hero, featured posts, and categories  |
-| `/posts/[page]`                                                 | Paginated archive              |
-| `/post/<slug>/`                                                 | Article                        |
-| `/categories/`                                                  | Category index with counts     |
-| `/category/<slug>/`                                             | Posts in one category          |
-| `/tags/`                                                        | Tag index with counts          |
-| `/tag/<slug>/`                                                  | Posts with one tag             |
-| `/search/`                                                      | Full search page (`?q=...`)    |
-| `/about/`, `/contact/`, `/privacy/`                             | Starter static pages           |
-| `/rss.xml`, `/sitemap.xml`, `/robots.txt`, `/search-index.json` | Feeds and generated endpoints  |
+| Route                                                           | Page                                          |
+| --------------------------------------------------------------- | --------------------------------------------- |
+| `/`                                                             | CV/About hero, featured posts, and categories |
+| `/posts/[page]`                                                 | Paginated archive                             |
+| `/post/<slug>/`                                                 | Article                                       |
+| `/categories/`                                                  | Category index with counts                    |
+| `/category/<slug>/`                                             | Posts in one category                         |
+| `/tags/`                                                        | Tag index with counts                         |
+| `/tag/<slug>/`                                                  | Posts with one tag                            |
+| `/search/`                                                      | Full search page (`?q=...`)                   |
+| `/about/`, `/contact/`, `/privacy/`                             | Starter static pages                          |
+| `/rss.xml`, `/sitemap.xml`, `/robots.txt`, `/search-index.json` | Feeds and generated endpoints                 |
 
 ## Customization
 

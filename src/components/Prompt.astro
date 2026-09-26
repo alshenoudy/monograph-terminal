@@ -1,24 +1,22 @@
 ---
 import { siteConfig } from "@/config/site";
 
-/*
- * Terminal-style section label: monospaced, sentence case, no uppercase
- * transform, with the leading `❯` picked out in the accent color. Defaults
- * to `siteConfig.tagline`, so the prompt is defined once and reused.
+/**
+ * Terminal-style section label. Renders plain text with a leading `❯`
+ * picked out in the accent color. Defaults to `siteConfig.tagline`.
  */
 interface Props {
-  /** Label text. A leading `❯` is rendered as the accent prompt character. */
+  /** Label text. The leading `❯` is rendered automatically. */
   text?: string;
   class?: string;
 }
 
-const { text = siteConfig.tagline, class: className } = Astro.props;
-const command = text.replace(/^❯\s*/, "");
-const hasPrompt = command !== text;
+const { text = siteConfig.tagline.replace(/^❯\s*/, ""), class: className } = Astro.props;
 ---
 
 <p class:list={["prompt", className]}>
-  {hasPrompt ? [<span class="prompt__prefix">❯</span>, ` ${command}`] : text}
+  <span class="prompt__prefix">❯</span>
+  {text}
 </p>
 
 <style>

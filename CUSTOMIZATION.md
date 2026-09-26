@@ -244,13 +244,13 @@ Every transition draws on three tokens so hovers feel like one system rather tha
 
 The reusable hover classes are:
 
-| Class                                             | Effect                                                              | Used by                                                          |
-| ------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| `.link-title` + `.link-title__text`               | The heading picks up the accent while the excerpt and meta stay put | Feed entries, category and tag lists, prev/next     |
-| `.link-sweep`                                     | Underline wipes in from the left                                    | Post byline links                                                |
-| `.nav-link`                                       | Hairline wipes in underneath; stays for the current page            | Header and footer navigation, pagination                         |
-| `.link-nudge` + `.link-nudge__arrow`              | Arrow leans toward its destination                                  | Pagination, prev/next                                            |
-| `.icon-btn`, `.pill`, `.share-btn`, `.social-btn` | Accent tint, and a 2px lift on the round buttons                    | Header controls, category pills, share and social rows           |
+| Class                                             | Effect                                                              | Used by                                                |
+| ------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------ |
+| `.link-title` + `.link-title__text`               | The heading picks up the accent while the excerpt and meta stay put | Feed entries, category and tag lists, prev/next        |
+| `.link-sweep`                                     | Underline wipes in from the left                                    | Post byline links                                      |
+| `.nav-link`                                       | Hairline wipes in underneath; stays for the current page            | Header and footer navigation, pagination               |
+| `.link-nudge` + `.link-nudge__arrow`              | Arrow leans toward its destination                                  | Pagination, prev/next                                  |
+| `.icon-btn`, `.pill`, `.share-btn`, `.social-btn` | Accent tint, and a 2px lift on the round buttons                    | Header controls, category pills, share and social rows |
 
 Nothing fades out on hover — a hovered item gains emphasis rather than the page losing it. All of it
 collapses to near-instant under `prefers-reduced-motion: reduce`.

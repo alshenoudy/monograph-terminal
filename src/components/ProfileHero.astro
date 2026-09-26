@@ -1,79 +1,62 @@
 ---
 import Experience from "@/components/Experience.astro";
-import Prompt from "@/components/Prompt.astro";
-import { siteConfig } from "@/config/site";
+import LocalIcon from "@/components/LocalIcon.astro";
+import { heroConfig } from "@/config/hero";
 
 /*
- * Home hero: name, role, intro, compact CV fact rows, experience, and contact
- * links. All content comes from siteConfig (name, tagline via Prompt, role,
- * about, cv, email, socials), so editing the page content never touches this
- * component.
+ * Home hero: name, role, intro, social contact links, and experience. All
+ * content is read from `heroConfig`, so editing the home page content is
+ * limited to that single file.
  */
-const { name, about, cv, email, socials } = siteConfig;
-const hasFacts = cv.facts.length > 0;
-const hasResume = cv.resumeUrl.trim().length > 0;
-const hasExperience = cv.experience.length > 0;
+const { name, about, role, experience, resumeUrl, email, socials } = heroConfig;
+const hasResume = resumeUrl.trim().length > 0;
+
+const iconByLabel: Record<string, "envelope" | "github" | "google" | "linkedin" | "twitter-x" | undefined> = {
+  GitHub: "github",
+  "Google Scholar": "google",
+  LinkedIn: "linkedin",
+};
 
 const heroLinks = [
   ...socials
     .filter((item) => item.label !== "RSS")
-    .map((item) => ({ label: item.label, href: item.href, external: true })),
-  { label: "Email", href: `mailto:${email}`, external: false },
-  ...(hasResume ? [{ label: "Resume", href: cv.resumeUrl, external: true }] : []),
+    .map((item) => ({
+      label: item.label,
+      href: item.href,
+      external: item.href.startsWith("http"),
+      icon: iconByLabel[item.label],
+    })),
+  { label: "Email", href: `mailto:${email}`, external: false, icon: "envelope" as const },
+  ...(hasResume ? [{ label: "Resume", href: resumeUrl, external: true, icon: undefined }] : []),
 ];
 ---
 
 <section class="profile-hero" aria-label="Introduction">
-  <Prompt class="profile-hero__prompt" />
   <h1 class="profile-hero__name">{name}</h1>
-  {cv.role && <p class="profile-hero__role">{cv.role}</p>}
+  {role && <p class="profile-hero__role">{role}</p>}
   <p class="profile-hero__about">{about}</p>
-
-  {
-    hasFacts && (
-      <dl class="profile-hero__facts">
-        {cv.facts.map((fact) => (
-          <div class="profile-hero__fact">
-            <dt class="profile-hero__fact-label">{fact.label}</dt>
-            <dd class="profile-hero__fact-value">
-              {fact.href ? (
-                <a href={fact.href} class="link-sweep">
-                  {fact.value}
-                </a>
-              ) : (
-                fact.value
-              )}
-            </dd>
-          </div>
-        ))}
-      </dl>
-    )
-  }
-
-  {
-    hasExperience && (
-      <div class="profile-hero__experience">
-        <Prompt class="profile-hero__experience-heading" text="❯ experience" />
-        <Experience />
-      </div>
-    )
-  }
 
   {
     heroLinks.length > 0 && (
       <ul class="profile-hero__links" aria-label="Contact links">
         {heroLinks.map((link) => (
           <li>
-            <a
-              href={link.href}
-              class="pill"
-              rel={link.external ? "noreferrer" : undefined}
-            >
-              {link.label}
+            <a href={link.href} class="pill profile-hero__pill" rel={link.external ? "noreferrer" : undefined}>
+              {link.icon && <LocalIcon name={link.icon} className="h-4 w-4" />}
+              <span>{link.label}</span>
             </a>
           </li>
         ))}
       </ul>
+    )
+  }
+
+  {
+    experience.length > 0 && (
+      <div class="profile-hero__experience">
+        <h2 class="section-title">Experience</h2>
+        <Experience experience={experience} />
+      </div>
     )
   }
 </section>
@@ -83,15 +66,11 @@ const heroLinks = [
     max-width: 60ch;
   }
 
-  .profile-hero__prompt {
-    margin: 0;
-  }
-
   .profile-hero__name {
-    margin: 0.75rem 0 0;
+    margin: 0;
     font-family: var(--font-display);
-    font-size: var(--font-size-pagehead);
-    font-weight: 600;
+    font-size: var(--font-size-hero);
+    font-weight: 700;
     letter-spacing: -0.03em;
     line-height: 1.05;
     text-wrap: balance;
@@ -100,54 +79,25 @@ const heroLinks = [
   .profile-hero__role {
     margin: 0.6rem 0 0;
     font-family: var(--font-display);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-md);
     font-weight: 500;
     color: var(--muted-foreground);
   }
 
   .profile-hero__about {
-    margin: 1.25rem 0 0;
-    color: var(--muted-foreground);
-    font-size: var(--font-size-readable);
-    line-height: 1.6;
-    text-wrap: pretty;
-  }
-
-  .profile-hero__facts {
-    display: grid;
-    gap: 0.5rem;
-    margin: 2rem 0 0;
-    border-top: 1px solid var(--border);
-    padding-top: 1.25rem;
-  }
-
-  .profile-hero__fact {
-    display: grid;
-    grid-template-columns: 6.5rem minmax(0, 1fr);
-    gap: 1rem;
-    align-items: baseline;
-  }
-
-  .profile-hero__fact-label {
-    font-family: var(--font-display);
-    font-size: var(--font-size-xs);
+    margin: 1.35rem 0 0;
+    color: var(--foreground);
+    font-size: var(--font-size-lg);
     font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--muted-foreground);
-  }
-
-  .profile-hero__fact-value {
-    margin: 0;
-    font-size: var(--font-size-readable);
-    line-height: 1.55;
+    line-height: 1.5;
+    text-wrap: pretty;
   }
 
   .profile-hero__links {
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem;
-    margin: var(--space-section) 0 0;
+    margin: 2rem 0 0;
     padding: 0;
     list-style: none;
   }
@@ -156,15 +106,8 @@ const heroLinks = [
     margin: var(--space-section) 0 0;
   }
 
-  .profile-hero__experience-heading {
-    display: block;
-    margin: 0 0 0.75rem;
-  }
-
-  @media (max-width: 480px) {
-    .profile-hero__fact {
-      grid-template-columns: 1fr;
-      gap: 0.15rem;
-    }
+  .profile-hero__pill {
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
   }
 </style>

@@ -27,24 +27,21 @@ const categoryList = getCategoryList(allPosts);
                 <PostCard post={post} variant="compact" headingLevel="h3" />
               ))}
             </div>
-          </section>
-        )
-      }
 
-      {
-        categoryList.length > 0 && (
-          <section class="home__section" aria-labelledby="categories-heading">
-            <h2 id="categories-heading" class="section-title">Categories</h2>
-            <ul class="home__categories" role="list">
-              {categoryList.map((category) => (
-                <li>
-                  <a href={categoryHref(category.name)} class="pill">
-                    {category.name}
-                    <span class="home__category-count">{category.count}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+            {
+              categoryList.length > 0 && (
+                <ul class="home__categories" role="list" aria-label="Categories">
+                  {categoryList.map((category) => (
+                    <li>
+                      <a href={categoryHref(category.name)} class="pill">
+                        {category.name}
+                        <span class="home__category-count">{category.count}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )
+            }
           </section>
         )
       }
@@ -66,6 +63,10 @@ const categoryList = getCategoryList(allPosts);
 
   .home__section {
     margin-top: var(--space-section);
+  }
+
+  .home__section .home__categories {
+    margin-top: 1.75rem;
   }
 
   .home__categories {

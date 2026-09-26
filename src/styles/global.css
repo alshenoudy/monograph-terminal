@@ -29,8 +29,9 @@
   font-weight: 300 700;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
-    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
@@ -41,9 +42,10 @@
   font-weight: 300 700;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
-    U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
-    U+2C60-2C7F, U+A720-A7FF;
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
 }
 
 /*
@@ -96,34 +98,25 @@
     Menlo, "Liberation Mono", monospace;
 
   /*
-   * Type scale. Every font-size in the codebase resolves to one of these
-   * tokens, so proportions are tuned here instead of per-rule. Steps below
-   * the body are ~0.9×, steps above it follow 1.25× (17/21/29/48 display
-   * ladder); the clamps cover the few sizes that respond to viewport.
-   *
-   * Display sizes sit near a 2.6–2.8× body ceiling (Scenery-style
-   * proportions) instead of the earlier 3.5× — big but compact.
+   * Type scale. Steps below the body are ~0.9×; steps above it follow a
+   * simple 1.25× ladder. A few display sizes use clamps so they breathe with
+   * the viewport. The overall proportions mirror Scenery's compact display
+   * ceiling (≈2.6–2.8× body) rather than a tall 3.5× headline.
    */
-  --font-size-2xs: 0.6875rem; /* 11px — tags, tag counts, code-copy */
+  --font-size-2xs: 0.6875rem; /* 11px — tags, counts, code-copy */
   --font-size-xs: 0.75rem; /* 12px — eyebrow, section-title, meta, nav, pill, th */
-  --font-size-sm: 0.8125rem; /* 13px — figcaption, article image caption */
-  --font-size-md: 0.875rem; /* 14px — btn, compact excerpt */
-  --font-size-lg: 0.9375rem; /* 15px — field, table, search empty */
-  --font-size-base: 1rem; /* 16px — body, callout body */
-  --font-size-readable: 1.0625rem; /* 17px — prose, card excerpt, search input */
-  --font-size-xl: 1.1875rem; /* 19px — blockquote */
-  --font-size-2xl: 1.3125rem; /* 21px — compact card title */
-  --font-size-3xl: 1.375rem; /* 22px — wordmark, search result title */
-  --font-size-lead: clamp(1.1rem, 2vw, 1.25rem); /* lead card excerpt */
-  --font-size-feed: clamp(1.5rem, 3vw, 1.8rem); /* feed card title */
-  --font-size-hero: clamp(2rem, 5vw, 3rem); /* lead card title */
-  --font-size-pagehead: clamp(2rem, 5vw, 2.75rem); /* archive page titles */
+  --font-size-sm: 0.8125rem; /* 13px — figcaption, captions */
+  --font-size-md: 0.875rem; /* 14px — btn, compact excerpt, fact values, experience description */
+  --font-size-lg: 1.0625rem; /* 17px — field, table, hero headline/about, search input */
+  --font-size-xl: 1.25rem; /* 20px — card feed titles, blockquote */
+  --font-size-2xl: 1.5rem; /* 24px — compact card titles, search result titles */
+  --font-size-hero: 2.125rem; /* 34px — home hero name, page titles */
+  --font-size-pagehead: var(--font-size-hero); /* archive/category titles */
   --font-size-article: clamp(2rem, 5.5vw, 3rem); /* post page title */
-  --font-size-article-excerpt: clamp(1.1rem, 2vw, 1.3rem);
-  --font-size-search-title: clamp(1.4rem, 2.8vw, 1.6rem);
-  --font-size-prose-h2: clamp(1.35rem, 2.5vw, 1.55rem);
-  --font-size-prose-h3: clamp(1.1rem, 1.8vw, 1.2rem);
   --font-size-code: 0.85rem; /* code blocks */
+  /* Semantic aliases that keep component code readable. */
+  --font-size-base: 1rem; /* 16px — body */
+  --font-size-readable: var(--font-size-lg); /* prose, card excerpts */
 
   --layout-wide: 75rem;
   --layout-content: 40rem;
@@ -580,8 +573,12 @@
     color: var(--accent);
   }
 
-  /* " //" separator between tags in a row; the row itself is built with flex + gap. */
-  .tag + .tag::before {
+  /*
+   * " //" separator between inline tags in article/post contexts. The chips
+   * on /tags/ use .tag--row and rely on flex gap instead, so skip separators
+   * there.
+   */
+  .tag + .tag:not(.tag--row)::before {
     content: "//";
     margin: 0 0.45rem;
     color: var(--border-strong);
@@ -665,7 +662,7 @@
 
   .wordmark {
     font-family: var(--font-display);
-    font-size: var(--font-size-3xl);
+    font-size: var(--font-size-xl);
     font-weight: 600;
     letter-spacing: -0.02em;
     text-decoration: none;
@@ -850,13 +847,13 @@
 
   .prose h2 {
     margin: 3rem 0 1rem;
-    font-size: var(--font-size-prose-h2);
+    font-size: var(--font-size-xl);
     line-height: 1.25;
   }
 
   .prose h3 {
     margin: 2.25rem 0 0.75rem;
-    font-size: var(--font-size-prose-h3);
+    font-size: var(--font-size-lg);
     line-height: 1.3;
   }
 

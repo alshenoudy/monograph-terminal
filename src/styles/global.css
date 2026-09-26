@@ -857,7 +857,9 @@
     font-family: var(--font-display);
     font-weight: 600;
     letter-spacing: -0.015em;
-    scroll-margin-top: 5rem;
+    /* Align jump targets with the TOC top so the highlighted heading lands
+       inside the active detection zone. */
+    scroll-margin-top: 7.5rem;
   }
 
   .prose h2 {

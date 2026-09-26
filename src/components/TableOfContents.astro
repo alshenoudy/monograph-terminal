@@ -75,17 +75,20 @@ const items = headings.filter(({ depth }) => depth >= minDepth && depth <= maxDe
         }
       },
       {
-        rootMargin: "-10% 0px -80% 0px",
+        /* Active zone starts at the TOC top (7.5rem); anything below the
+           top 20% of the viewport is ignored for highlighting. */
+        rootMargin: "-7.5rem 0px -80% 0px",
         threshold: 0,
       },
     );
 
     targets.forEach((target) => observer.observe(target));
 
-    /* Activate the closest heading above the viewport on load. */
+    /* Activate the closest heading above the active zone on load. */
+    const activeZoneTop = 7.5 * 16; /* 7.5rem in pixels */
     const topTarget = targets.reduce((closest, target) => {
       const rect = target.getBoundingClientRect();
-      if (rect.top <= window.innerHeight * 0.1) {
+      if (rect.top <= activeZoneTop) {
         if (!closest) return target;
         const closestRect = closest.getBoundingClientRect();
         return rect.top > closestRect.top ? target : closest;

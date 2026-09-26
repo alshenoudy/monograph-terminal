@@ -46,8 +46,9 @@ const categoryList = getCategoryList(allPosts);
         )
       }
 
-      <section class="home__section" aria-label="Archive">
-        <a href="/archive/" class="btn btn-outline">Browse the archive</a>
+      <section class="home__section home__actions" aria-label="Archive">
+        <a href="/archive/" class="btn btn-outline">Browse all posts</a>
+        <a href="/topics/" class="btn btn-outline">Explore topics</a>
       </section>
     </div>
   </main>
@@ -67,6 +68,12 @@ const categoryList = getCategoryList(allPosts);
 
   .home__section .home__categories {
     margin-top: 1.75rem;
+  }
+
+  .home__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
 
   .home__categories {

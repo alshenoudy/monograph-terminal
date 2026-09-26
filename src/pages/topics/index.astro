@@ -10,15 +10,15 @@ const allPosts = visiblePosts(await getCollection("posts"));
 const tagList = getAllTags(allPosts);
 ---
 
-<BaseLayout title="Tags" description={`Every tag on ${siteConfig.name}, with post counts.`}>
+      <BaseLayout title="Topics" description={`Every topic on ${siteConfig.name}, with post counts.`}>
   <SiteHeader posts={allPosts} />
   <main id="content" class="outer">
     <div class="canvas">
       <header class="pagehead">
         <p class="eyebrow">Index</p>
-        <h1 class="pagehead-title">Tags</h1>
+        <h1 class="pagehead-title">Topics</h1>
         <p class="pagehead-description">
-          {tagList.length} {tagList.length === 1 ? "tag" : "tags"} across {allPosts.length} posts.
+          {tagList.length} {tagList.length === 1 ? "topic" : "topics"} across {allPosts.length} posts.
         </p>
       </header>
 

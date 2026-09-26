@@ -35,6 +35,7 @@ const nextUrl = withTrailingSlash(page.url.next);
         <h1 class="pagehead-title">All posts</h1>
         <p class="pagehead-description">
           {page.total} {page.total === 1 ? "post" : "posts"}, newest first. Page {page.currentPage} of {page.lastPage}.
+          {" "}<a href="/topics/" class="link-sweep">Explore topics</a>.
         </p>
       </header>
 

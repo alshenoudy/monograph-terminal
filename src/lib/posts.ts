@@ -15,7 +15,7 @@ export const tagSlug = (tag: string) =>
 
 export const categoryHref = (category: string) => `/category/${categorySlug(category)}/`;
 
-export const tagHref = (tag: string) => `/tag/${tagSlug(tag)}/`;
+export const tagHref = (tag: string) => `/topic/${tagSlug(tag)}/`;
 
 export const postSlug = (post: Post) => post.id.replace(/\/index$/, "");
 

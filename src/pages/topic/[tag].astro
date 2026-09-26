@@ -5,7 +5,7 @@ import SiteFooter from "@/components/SiteFooter.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { siteConfig } from "@/config/site";
-import { getAllTags, getPostsByTag, tagSlug, visiblePosts, type Post } from "@/lib/posts";
+import { getAllTags, getPostsByTag, visiblePosts, type Post } from "@/lib/posts";
 
 export async function getStaticPaths() {
   const allPosts = visiblePosts(await getCollection("posts"));
@@ -25,12 +25,12 @@ const { tag, allPosts } = Astro.props;
 const posts = getPostsByTag(allPosts, tag);
 ---
 
-<BaseLayout title={`#${tagSlug(tag)}`} description={`Posts tagged ${tag} on ${siteConfig.name}.`}>
+  <BaseLayout title={tag} description={`Posts about ${tag} on ${siteConfig.name}.`}>
   <SiteHeader posts={allPosts} />
   <main id="content" class="outer">
     <div class="canvas">
       <header class="pagehead">
-        <p class="eyebrow">Tag</p>
+        <p class="eyebrow">Topic</p>
         <h1 class="pagehead-title">{tag}</h1>
         <p class="meta mt-5">
           <span>{posts.length} {posts.length === 1 ? "post" : "posts"}</span>
@@ -41,7 +41,7 @@ const posts = getPostsByTag(allPosts, tag);
         {posts.map((post) => <PostCard post={post} />)}
       </div>
 
-      <a href="/tags/" class="btn btn-outline btn-block mt-16">All tags</a>
+      <a href="/topics/" class="btn btn-outline btn-block mt-16">All topics</a>
     </div>
   </main>
   <SiteFooter />

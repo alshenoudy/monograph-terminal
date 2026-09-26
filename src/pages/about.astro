@@ -1,5 +1,7 @@
 ---
 import { getCollection } from "astro:content";
+import Experience from "@/components/Experience.astro";
+import Prompt from "@/components/Prompt.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
@@ -17,7 +19,7 @@ const allPosts = visiblePosts(await getCollection("posts"));
   <main id="content" class="outer">
     <div class="canvas">
       <header class="pagehead">
-        <p class="eyebrow">About</p>
+        <Prompt />
         <h1 class="pagehead-title">{siteConfig.name}</h1>
         <p class="pagehead-description">{siteConfig.about}</p>
       </header>
@@ -42,6 +44,9 @@ const allPosts = visiblePosts(await getCollection("posts"));
           {siteConfig.authorName} writes everything published here. The archive is organized by
           category for the shape of the work, and by tag for the specific topics covered.
         </p>
+
+        <h2>Experience</h2>
+        <Experience />
 
         <h2>Get in touch</h2>
         <p>

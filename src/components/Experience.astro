@@ -1,0 +1,91 @@
+---
+import { siteConfig } from "@/config/site";
+
+/*
+ * CV experience list: a two-column sub-layout per entry — the period in
+ * eyebrow styling on the left, title -- position with a short paragraph on
+ * the right, hairline separators between entries. Content comes from
+ * `siteConfig.cv.experience`, so pages never hardcode entries. An empty
+ * array renders nothing.
+ */
+const { experience } = siteConfig.cv;
+---
+
+{
+  experience.length > 0 && (
+    <section class="experience" aria-label="Experience">
+      {experience.map((entry) => (
+        <div class="experience__entry">
+          <p class="experience__period">{entry.period}</p>
+          <div class="experience__body">
+            <h3 class="experience__title">
+              {entry.title} <span class="experience__position">-- {entry.position}</span>
+            </h3>
+            <p class="experience__description">{entry.description}</p>
+          </div>
+        </div>
+      ))}
+    </section>
+  )
+}
+
+<style>
+  .experience {
+    display: grid;
+  }
+
+  .experience__entry {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 1.25rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .experience__entry:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .experience__entry:last-child {
+    padding-bottom: 0;
+  }
+
+  .experience__period {
+    margin: 0.2rem 0 0;
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  .experience__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--font-size-readable);
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  .experience__position {
+    font-weight: 400;
+    color: var(--muted-foreground);
+  }
+
+  .experience__description {
+    margin: 0.5rem 0 0;
+    color: var(--muted-foreground);
+    font-size: var(--font-size-readable);
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 480px) {
+    .experience__entry {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+  }
+</style>

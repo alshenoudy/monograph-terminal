@@ -53,7 +53,7 @@ const heading = title ?? defaultTitles[type];
 
   .callout-title {
     margin: 0 0 0.4rem;
-    font-size: 0.72rem;
+    font-size: var(--font-size-xs);
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -74,7 +74,7 @@ const heading = title ?? defaultTitles[type];
   }
 
   .callout-body {
-    font-size: 1rem;
+    font-size: var(--font-size-base);
     line-height: 1.7;
     color: color-mix(in srgb, var(--foreground) 92%, transparent);
   }

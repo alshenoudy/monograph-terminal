@@ -95,8 +95,38 @@
     "Geist Mono", ui-monospace, "SFMono-Regular", "Cascadia Code", "JetBrains Mono", Consolas,
     Menlo, "Liberation Mono", monospace;
 
+  /*
+   * Type scale. Every font-size in the codebase resolves to one of these
+   * tokens, so proportions are tuned here instead of per-rule. Steps below
+   * the body are ~0.9×, steps above it follow 1.25× (17/21/29/48 display
+   * ladder); the clamps cover the few sizes that respond to viewport.
+   *
+   * Display sizes sit near a 2.6–2.8× body ceiling (Scenery-style
+   * proportions) instead of the earlier 3.5× — big but compact.
+   */
+  --font-size-2xs: 0.6875rem; /* 11px — tags, tag counts, code-copy */
+  --font-size-xs: 0.75rem; /* 12px — eyebrow, section-title, meta, nav, pill, th */
+  --font-size-sm: 0.8125rem; /* 13px — figcaption, article image caption */
+  --font-size-md: 0.875rem; /* 14px — btn, compact excerpt */
+  --font-size-lg: 0.9375rem; /* 15px — field, table, search empty */
+  --font-size-base: 1rem; /* 16px — body, callout body */
+  --font-size-readable: 1.0625rem; /* 17px — prose, card excerpt, search input */
+  --font-size-xl: 1.1875rem; /* 19px — blockquote */
+  --font-size-2xl: 1.3125rem; /* 21px — compact card title */
+  --font-size-3xl: 1.375rem; /* 22px — wordmark, search result title */
+  --font-size-lead: clamp(1.1rem, 2vw, 1.25rem); /* lead card excerpt */
+  --font-size-feed: clamp(1.5rem, 3vw, 1.8rem); /* feed card title */
+  --font-size-hero: clamp(2rem, 5vw, 3rem); /* lead card title */
+  --font-size-pagehead: clamp(2rem, 5vw, 2.75rem); /* archive page titles */
+  --font-size-article: clamp(2rem, 5.5vw, 3rem); /* post page title */
+  --font-size-article-excerpt: clamp(1.1rem, 2vw, 1.3rem);
+  --font-size-search-title: clamp(1.4rem, 2.8vw, 1.6rem);
+  --font-size-prose-h2: clamp(1.35rem, 2.5vw, 1.55rem);
+  --font-size-prose-h3: clamp(1.1rem, 1.8vw, 1.2rem);
+  --font-size-code: 0.85rem; /* code blocks */
+
   --layout-wide: 75rem;
-  --layout-content: 45rem;
+  --layout-content: 40rem;
   --gutter: 1.5rem;
   --space-section: clamp(4rem, 8vw, 7.5rem);
 
@@ -150,7 +180,7 @@
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
-    font-size: 1rem;
+    font-size: var(--font-size-base);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
@@ -253,7 +283,7 @@
   .pagehead-title {
     margin: 0.75rem 0 0;
     font-family: var(--font-display);
-    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    font-size: var(--font-size-pagehead);
     font-weight: 600;
     letter-spacing: -0.03em;
     line-height: 1.05;
@@ -264,7 +294,7 @@
     max-width: 34rem;
     margin: 1rem 0 0;
     color: var(--muted-foreground);
-    font-size: 1.0625rem;
+    font-size: var(--font-size-readable);
     line-height: 1.6;
     text-wrap: pretty;
   }
@@ -290,7 +320,7 @@
 
   .eyebrow {
     font-family: var(--font-display);
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     font-weight: 500;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -304,7 +334,7 @@
     align-items: center;
     margin: 0 0 1.75rem;
     font-family: var(--font-display);
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     font-weight: 500;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -326,7 +356,7 @@
     align-items: center;
     gap: 0.4rem;
     font-family: var(--font-display);
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     font-weight: 500;
     line-height: 1.4;
     letter-spacing: 0.03em;
@@ -430,7 +460,7 @@
     padding: 0.85rem 1.5rem;
     font: inherit;
     font-family: var(--font-display);
-    font-size: 0.875rem;
+    font-size: var(--font-size-md);
     font-weight: 600;
     text-decoration: none;
     border-radius: var(--radius-sm);
@@ -484,7 +514,7 @@
     padding: 0.75rem 0.9rem;
     font: inherit;
     font-family: var(--font-display);
-    font-size: 0.9375rem;
+    font-size: var(--font-size-lg);
     border-radius: var(--radius-sm);
   }
 
@@ -507,7 +537,7 @@
     border: 1px solid var(--border);
     padding: 0.3rem 0.7rem;
     font-family: var(--font-display);
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     line-height: 1.2;
     text-decoration: none;
     color: var(--muted-foreground);
@@ -535,7 +565,7 @@
     display: inline-flex;
     align-items: center;
     font-family: var(--font-display);
-    font-size: 0.6875rem;
+    font-size: var(--font-size-2xs);
     font-weight: 500;
     line-height: 1.2;
     letter-spacing: 0.06em;
@@ -562,7 +592,7 @@
     border: 1px solid var(--border);
     padding: 0.45rem 0.8rem;
     border-radius: var(--radius-full);
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     transition:
       border-color var(--duration) var(--ease-out),
       background-color var(--duration) var(--ease-out),
@@ -583,7 +613,7 @@
   .tag__count {
     margin-left: 0.45rem;
     color: var(--muted-foreground);
-    font-size: 0.6875rem;
+    font-size: var(--font-size-2xs);
   }
 
   .icon-btn {
@@ -635,7 +665,7 @@
 
   .wordmark {
     font-family: var(--font-display);
-    font-size: 1.375rem;
+    font-size: var(--font-size-3xl);
     font-weight: 600;
     letter-spacing: -0.02em;
     text-decoration: none;
@@ -645,7 +675,7 @@
   .nav-link {
     position: relative;
     font-family: var(--font-display);
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     font-weight: 500;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -771,7 +801,7 @@
    * text pages all render the same reading column.
    */
   .prose {
-    font-size: 1.0625rem;
+    font-size: var(--font-size-readable);
     line-height: 1.75;
     word-break: break-word;
   }
@@ -820,19 +850,19 @@
 
   .prose h2 {
     margin: 3rem 0 1rem;
-    font-size: clamp(1.4rem, 3vw, 1.75rem);
+    font-size: var(--font-size-prose-h2);
     line-height: 1.25;
   }
 
   .prose h3 {
     margin: 2.25rem 0 0.75rem;
-    font-size: clamp(1.125rem, 2vw, 1.3rem);
+    font-size: var(--font-size-prose-h3);
     line-height: 1.3;
   }
 
   .prose h4 {
     margin: 2rem 0 0.5rem;
-    font-size: 1.0625rem;
+    font-size: var(--font-size-readable);
   }
 
   .prose a {
@@ -855,7 +885,7 @@
     border-left: 2px solid var(--border-strong);
     padding: 0.25rem 0 0.25rem 1.4rem;
     font-family: var(--font-serif);
-    font-size: 1.1875rem;
+    font-size: var(--font-size-xl);
     font-style: italic;
     line-height: 1.6;
     color: var(--foreground);
@@ -887,7 +917,7 @@
 
   .prose figcaption {
     margin-top: 0.6rem;
-    font-size: 0.8125rem;
+    font-size: var(--font-size-sm);
     color: var(--muted-foreground);
   }
 
@@ -906,7 +936,7 @@
   .prose pre code {
     background: transparent;
     padding: 0;
-    font-size: 0.85rem;
+    font-size: var(--font-size-code);
     line-height: 1.7;
   }
 
@@ -914,7 +944,7 @@
     width: 100%;
     margin: 2rem 0;
     border-collapse: collapse;
-    font-size: 0.9375rem;
+    font-size: var(--font-size-lg);
   }
 
   .prose th,
@@ -925,7 +955,7 @@
   }
 
   .prose th {
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -939,7 +969,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: 1rem 1.15rem;
-    font-size: 0.85rem;
+    font-size: var(--font-size-code);
     line-height: 1.7;
   }
 
@@ -984,7 +1014,7 @@
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: var(--font-size-2xs);
     font-weight: 600;
     border-radius: var(--radius-xs);
     transition:

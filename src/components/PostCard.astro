@@ -66,7 +66,7 @@ const readableDate = formatDate(date);
   .card-excerpt {
     margin: 0.75rem 0 0;
     color: color-mix(in srgb, var(--foreground) 88%, transparent);
-    font-size: 1.0625rem;
+    font-size: var(--font-size-readable);
     line-height: 1.55;
     text-wrap: pretty;
   }
@@ -87,13 +87,13 @@ const readableDate = formatDate(date);
   }
 
   .card-lead .card-title {
-    font-size: clamp(2.1rem, 6vw, 3.75rem);
-    line-height: 1.03;
+    font-size: var(--font-size-hero);
+    line-height: 1.05;
   }
 
   .card-lead .card-excerpt {
     max-width: 46rem;
-    font-size: clamp(1.125rem, 2.4vw, 1.5rem);
+    font-size: var(--font-size-lead);
     line-height: 1.4;
   }
 
@@ -102,12 +102,12 @@ const readableDate = formatDate(date);
   }
 
   .card-feed .card-title {
-    font-size: clamp(1.6rem, 3.6vw, 2.125rem);
-    line-height: 1.12;
+    font-size: var(--font-size-feed);
+    line-height: 1.15;
   }
 
   .card-compact .card-title {
-    font-size: 1.1875rem;
+    font-size: var(--font-size-2xl);
     line-height: 1.25;
     letter-spacing: -0.01em;
   }
@@ -115,7 +115,7 @@ const readableDate = formatDate(date);
   .card-compact .card-excerpt {
     margin-top: 0.4rem;
     color: var(--muted-foreground);
-    font-size: 0.875rem;
+    font-size: var(--font-size-md);
     line-height: 1.6;
   }
 

@@ -1,0 +1,170 @@
+---
+import Experience from "@/components/Experience.astro";
+import Prompt from "@/components/Prompt.astro";
+import { siteConfig } from "@/config/site";
+
+/*
+ * Home hero: name, role, intro, compact CV fact rows, experience, and contact
+ * links. All content comes from siteConfig (name, tagline via Prompt, role,
+ * about, cv, email, socials), so editing the page content never touches this
+ * component.
+ */
+const { name, about, cv, email, socials } = siteConfig;
+const hasFacts = cv.facts.length > 0;
+const hasResume = cv.resumeUrl.trim().length > 0;
+const hasExperience = cv.experience.length > 0;
+
+const heroLinks = [
+  ...socials
+    .filter((item) => item.label !== "RSS")
+    .map((item) => ({ label: item.label, href: item.href, external: true })),
+  { label: "Email", href: `mailto:${email}`, external: false },
+  ...(hasResume ? [{ label: "Resume", href: cv.resumeUrl, external: true }] : []),
+];
+---
+
+<section class="profile-hero" aria-label="Introduction">
+  <Prompt class="profile-hero__prompt" />
+  <h1 class="profile-hero__name">{name}</h1>
+  {cv.role && <p class="profile-hero__role">{cv.role}</p>}
+  <p class="profile-hero__about">{about}</p>
+
+  {
+    hasFacts && (
+      <dl class="profile-hero__facts">
+        {cv.facts.map((fact) => (
+          <div class="profile-hero__fact">
+            <dt class="profile-hero__fact-label">{fact.label}</dt>
+            <dd class="profile-hero__fact-value">
+              {fact.href ? (
+                <a href={fact.href} class="link-sweep">
+                  {fact.value}
+                </a>
+              ) : (
+                fact.value
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+
+  {
+    hasExperience && (
+      <div class="profile-hero__experience">
+        <Prompt class="profile-hero__experience-heading" text="❯ experience" />
+        <Experience />
+      </div>
+    )
+  }
+
+  {
+    heroLinks.length > 0 && (
+      <ul class="profile-hero__links" aria-label="Contact links">
+        {heroLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="pill"
+              rel={link.external ? "noreferrer" : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</section>
+
+<style>
+  .profile-hero {
+    max-width: 60ch;
+  }
+
+  .profile-hero__prompt {
+    margin: 0;
+  }
+
+  .profile-hero__name {
+    margin: 0.75rem 0 0;
+    font-family: var(--font-display);
+    font-size: var(--font-size-pagehead);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  .profile-hero__role {
+    margin: 0.6rem 0 0;
+    font-family: var(--font-display);
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    color: var(--muted-foreground);
+  }
+
+  .profile-hero__about {
+    margin: 1.25rem 0 0;
+    color: var(--muted-foreground);
+    font-size: var(--font-size-readable);
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .profile-hero__facts {
+    display: grid;
+    gap: 0.5rem;
+    margin: 2rem 0 0;
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+  }
+
+  .profile-hero__fact {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+  }
+
+  .profile-hero__fact-label {
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  .profile-hero__fact-value {
+    margin: 0;
+    font-size: var(--font-size-readable);
+    line-height: 1.55;
+  }
+
+  .profile-hero__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: var(--space-section) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .profile-hero__experience {
+    margin: var(--space-section) 0 0;
+  }
+
+  .profile-hero__experience-heading {
+    display: block;
+    margin: 0 0 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    .profile-hero__fact {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+    }
+  }
+</style>

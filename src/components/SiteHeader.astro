@@ -544,7 +544,7 @@ const isCurrentPath = (href: string) =>
     padding: 0;
     font: inherit;
     font-family: var(--font-display);
-    font-size: 1.0625rem;
+    font-size: var(--font-size-readable);
   }
 
   .search-input::placeholder {
@@ -609,7 +609,7 @@ const isCurrentPath = (href: string) =>
     display: block;
     overflow: hidden;
     font-family: var(--font-display);
-    font-size: 0.95rem;
+    font-size: var(--font-size-3xl);
     font-weight: 600;
     line-height: 1.35;
     text-overflow: ellipsis;
@@ -621,7 +621,7 @@ const isCurrentPath = (href: string) =>
     margin-top: 0.2rem;
     color: var(--muted-foreground);
     font-family: var(--font-display);
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
     letter-spacing: 0.03em;
     text-transform: uppercase;
   }
@@ -638,7 +638,7 @@ const isCurrentPath = (href: string) =>
     padding: 1.75rem 0.75rem;
     color: var(--muted-foreground);
     font-family: var(--font-display);
-    font-size: 0.9375rem;
+    font-size: var(--font-size-lg);
   }
 
   .search-foot {
@@ -649,7 +649,7 @@ const isCurrentPath = (href: string) =>
     padding: 0.6rem 1rem;
     color: var(--muted-foreground);
     font-family: var(--font-display);
-    font-size: 0.7rem;
+    font-size: var(--font-size-2xs);
   }
 
   .search-foot span {
@@ -669,7 +669,7 @@ const isCurrentPath = (href: string) =>
     padding: 0 0.25rem;
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: 0.62rem;
+    font-size: var(--font-size-2xs);
     border-radius: var(--radius-xs);
   }
 
@@ -697,7 +697,7 @@ const isCurrentPath = (href: string) =>
 
     .search-input {
       height: 3.5rem;
-      font-size: 1rem;
+      font-size: var(--font-size-base);
     }
 
     .search-body {

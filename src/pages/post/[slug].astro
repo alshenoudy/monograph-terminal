@@ -323,7 +323,7 @@ const structuredData = {
     .article-title {
       margin: 1.25rem 0 0;
       font-family: var(--font-display);
-      font-size: clamp(2.25rem, 6.5vw, 4rem);
+      font-size: var(--font-size-article);
       font-weight: 600;
       letter-spacing: -0.035em;
       line-height: 1.02;
@@ -334,7 +334,7 @@ const structuredData = {
     .article-excerpt {
       margin: 1.25rem 0 0;
       color: color-mix(in srgb, var(--foreground) 82%, transparent);
-      font-size: clamp(1.125rem, 2.4vw, 1.4rem);
+      font-size: var(--font-size-article-excerpt);
       line-height: 1.45;
       text-wrap: pretty;
     }
@@ -359,7 +359,7 @@ const structuredData = {
       max-width: var(--layout-content);
       margin: 0.75rem auto 0;
       color: var(--muted-foreground);
-      font-size: 0.8125rem;
+      font-size: var(--font-size-sm);
     }
 
     .share-btn {

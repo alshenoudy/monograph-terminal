@@ -22,8 +22,7 @@ const categoryList = getCategoryList(allPosts);
         <p class="eyebrow">Index</p>
         <h1 class="pagehead-title">Categories</h1>
         <p class="pagehead-description">
-          {allPosts.length} posts, filed under {categoryList.length}
-          {categoryList.length === 1 ? "category" : "categories"}.
+          {`${allPosts.length} posts, filed under ${categoryList.length} ${categoryList.length === 1 ? "category" : "categories"}.`}
         </p>
       </header>
 

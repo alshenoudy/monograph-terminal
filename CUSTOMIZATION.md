@@ -5,8 +5,8 @@ Use this guide when adapting Monograph for a real blog.
 ## Site Settings
 
 Edit [src/config/site.ts](./src/config/site.ts) first. It holds the wordmark, default metadata,
-canonical domain, language and date locale, the sidebar about blurb, social links, and the
-newsletter and contact form settings.
+canonical domain, language and date locale, the home hero intro (`about`), the compact CV block
+(`cv`), social links, and the newsletter and contact form settings.
 
 Set `siteConfig.siteUrl` before building for production. Canonical URLs, social image URLs, RSS,
 `robots.txt`, the sitemap, and JSON-LD all derive from it.
@@ -15,6 +15,47 @@ The header shows `siteConfig.name` as plain text. There is no logo slot by desig
 image mark, replace the `.wordmark` anchor in
 [src/components/SiteHeader.astro](./src/components/SiteHeader.astro) and the matching one in
 [src/components/SiteFooter.astro](./src/components/SiteFooter.astro).
+
+### Home Hero CV
+
+The front page opens with a compact CV hero rendered by
+[src/components/ProfileHero.astro](./src/components/ProfileHero.astro). It reads `name`, `about`,
+`email`, and `socials` from the site config, plus a `cv` object:
+
+```ts
+cv: {
+  role: "Writer & software engineer", // line under the name; delete for none
+  facts: [                            // label→value rows; empty array hides the block
+    { label: "now", value: "Writing here and shipping Monograph" },
+    { label: "prev", value: "Platform teams, 2019—2026", href: "/about/" },
+    { label: "focus", value: "design systems, web performance, developer tools" },
+  ],
+  experience: [                      // CV entries; empty array hides the block
+    {
+      period: "2026 — Now",
+      title: "Staff Engineer",
+      position: "Meridian Labs",
+      description: "Own the design-system platform every product team builds on.",
+    },
+  ],
+  resumeUrl: "", // optional; adds a Resume pill when non-empty
+},
+```
+
+An empty `facts` array drops the fact rows; an empty `role` or `resumeUrl` drops those elements.
+Contact pills under the facts come from `siteConfig.socials` (RSS is excluded there — it already
+lives in the footer) plus a built-in `Email` pill from `siteConfig.email`.
+
+`cv.experience` renders through [src/components/Experience.astro](./src/components/Experience.astro):
+a two-column sub-layout per entry — the `period` in eyebrow styling on the left, `Title -- Position`
+with a description paragraph on the right, and hairline separators between entries. The same
+component drives the Experience section on the home hero and on the About page, so editing the
+array updates both.
+
+The hero opens with a terminal-style label: [src/components/Prompt.astro](./src/components/Prompt.astro)
+renders `siteConfig.tagline` in the mono font, sentence case, with the leading `❯` in the accent
+color. It also replaces the eyebrow on the About page, and accepts a `text` prop for one-off
+labels anywhere else.
 
 ## Navigation
 
@@ -55,7 +96,7 @@ export const categories = [
 ] as const;
 ```
 
-Keep it short — six is the practical ceiling before the sidebar stops reading as a menu. To change
+Keep it short — six is the practical ceiling before the category pills stop reading as a menu. To change
 the set, edit that array, update the matching `categoryDescriptions` entry, and change the `category`
 value in any affected post. The category is a typed enum, so a mismatch fails the build rather than
 shipping a broken archive.
@@ -64,7 +105,7 @@ From there the theme handles the rest:
 
 - `/categories/` lists every category with its description and post count, in configured order.
 - `/category/<slug>/` is generated for each category that has at least one post.
-- The home sidebar lists the same categories with counts.
+- The home page lists the same categories as pills with counts.
 - The post byline links the category; tags appear below the title.
 
 Slugs are derived from the name (`"Design Systems"` becomes `design-systems`).
@@ -83,7 +124,7 @@ The theme handles the rest:
 - `/tags/` indexes every tag across published posts with counts, most used first.
 - `/tag/<slug>/` archives the posts carrying a tag, slugs derived with the same rules as categories
   (`"Design Tokens"` becomes `design-tokens`).
-- Tags render under the article title, on feed cards (compact sidebar cards excepted), in search
+- Tags render under the article title, on feed cards (compact featured cards excepted), in search
   results, and as JSON-LD `keywords`.
 - Related posts weigh shared tags after the category match.
 
@@ -100,8 +141,8 @@ back to the post schema in [src/content.config.ts](./src/content.config.ts) and 
 
 ## Featured Posts
 
-Set `featured: true` in a post's frontmatter to list it in the home sidebar's "Featured" section.
-The sidebar shows up to four, newest first, and skips the post already shown as the latest.
+Set `featured: true` in a post's frontmatter to list it in the home page's "Featured writing"
+section — up to four compact cards, newest first.
 
 ## Feature Images
 
@@ -122,7 +163,10 @@ if your readers move at a different pace.
 
 ## Newsletter and Contact Forms
 
-Both forms are provider-neutral and share the same three states:
+The newsletter signup renders once, at the top of the site footer on every page except the home
+page, which passes `<SiteFooter showNewsletter={false} />` to keep the CV hero clean (set
+`siteConfig.newsletter.enabled: false` to hide it everywhere); the contact form stays on
+`/contact/`. Both forms are provider-neutral and share the same three states:
 
 | `enabled` | `action`               | Behavior                                                                                   |
 | --------- | ---------------------- | ------------------------------------------------------------------------------------------ |
@@ -202,7 +246,7 @@ The reusable hover classes are:
 
 | Class                                             | Effect                                                              | Used by                                                          |
 | ------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| `.link-title` + `.link-title__text`               | The heading picks up the accent while the excerpt and meta stay put | Feed entries, sidebar rows, category and tag lists, prev/next     |
+| `.link-title` + `.link-title__text`               | The heading picks up the accent while the excerpt and meta stay put | Feed entries, category and tag lists, prev/next     |
 | `.link-sweep`                                     | Underline wipes in from the left                                    | Post byline links                                                |
 | `.nav-link`                                       | Hairline wipes in underneath; stays for the current page            | Header and footer navigation, pagination                         |
 | `.link-nudge` + `.link-nudge__arrow`              | Arrow leans toward its destination                                  | Pagination, prev/next                                            |

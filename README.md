@@ -13,7 +13,7 @@ Monograph is a free Astro theme for essays, notes, and long-form writing. It is 
 
 ## Features
 
-- Text-first front page: a large latest post, a whitespace-separated feed with no thumbnails, and a sticky sidebar holding the about blurb, a subscribe form, featured posts, and categories with post counts
+- Text-first front page: a compact CV/About hero (name, role, intro, label→value fact rows, and contact links), featured posts as whitespace-separated cards, category pills, and an archive link — no thumbnails
 - Article pages with a single 720px reading column, a byline with category and tags, a share row above the feature image, copy-link, previous/next navigation, and related posts
 - Two-level taxonomy: a short configured list of categories (`/categories/` index with descriptions and counts, one generated archive per category) plus free-form per-post tags with a `/tags/` index and a generated archive per tag
 - Archive, search, about, contact, privacy, and 404 pages, plus RSS, sitemap, and `robots.txt`
@@ -81,7 +81,7 @@ cover: # optional; shown on the post, never in the feed
   alt: "Soft gradient mesh"
   creditName: "Credits to Codioful via Unsplash"
   creditUrl: "https://unsplash.com/photos/..."
-featured: false # true lists it in the home sidebar
+featured: false # true lists it in the home Featured section
 draft: false
 ---
 ```
@@ -96,7 +96,7 @@ each tag gets an archive page at `/tag/<slug>/`.
 
 | Route                                                           | Page                           |
 | --------------------------------------------------------------- | ------------------------------ |
-| `/`                                                             | Latest post, feed, and sidebar |
+| `/`                                                             | CV/About hero, featured posts, and categories  |
 | `/posts/[page]`                                                 | Paginated archive              |
 | `/post/<slug>/`                                                 | Article                        |
 | `/categories/`                                                  | Category index with counts     |

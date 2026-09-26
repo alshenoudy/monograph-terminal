@@ -41,17 +41,17 @@ const isDemo = isEnabled && action.length === 0;
         data-contact-form={isDemo ? "" : undefined}
       >
         <div class="grid gap-2">
-          <label class="text-sm font-semibold" for="contact-name">Name</label>
+          <label class="contact-label" for="contact-name">Name</label>
           <input id="contact-name" name="name" type="text" autocomplete="name" required disabled={!isEnabled} class="field" />
         </div>
 
         <div class="grid gap-2">
-          <label class="text-sm font-semibold" for="contact-email">Email</label>
+          <label class="contact-label" for="contact-email">Email</label>
           <input id="contact-email" name="email" type="email" autocomplete="email" required disabled={!isEnabled} class="field" />
         </div>
 
         <div class="grid gap-2">
-          <label class="text-sm font-semibold" for="contact-message">Message</label>
+          <label class="contact-label" for="contact-message">Message</label>
           <textarea id="contact-message" name="message" rows="7" required disabled={!isEnabled} class="field resize-y"></textarea>
         </div>
 
@@ -93,6 +93,12 @@ const isDemo = isEnabled && action.length === 0;
   }
 
   <style>
+    .contact-label {
+      font-family: var(--font-display);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+    }
+
     .contact-status:empty {
       display: none;
     }

@@ -1,33 +1,33 @@
 ---
-import type { HeroExperience } from "@/config/hero";
+import type { AboutEducation } from "@/config/about";
 
 interface Props {
-  /** CV entries to render. Pass an empty array to hide the section entirely. */
-  experience: HeroExperience[];
+  /** Education entries to render. Pass an empty array to hide the section. */
+  education: AboutEducation[];
 }
 
-const { experience } = Astro.props;
+const { education } = Astro.props;
 ---
 
 {
-  experience.length > 0 && (
-    <section class="experience" aria-label="Experience">
-      {experience.map((entry) => (
-        <div class="experience__entry">
-          <p class="experience__period">{entry.period}</p>
-          <div class="experience__body">
-            <h3 class="experience__title">
+  education.length > 0 && (
+    <section class="education" aria-label="Education">
+      {education.map((entry) => (
+        <div class="education__entry">
+          <p class="education__period">{entry.period}</p>
+          <div class="education__body">
+            <h3 class="education__title">
               {entry.href ? (
-                <a href={entry.href} class="experience__title-link">{entry.title}</a>
+                <a href={entry.href} class="education__title-link">{entry.title}</a>
               ) : (
                 entry.title
               )}
-              {entry.position && (
-                <span class="experience__position"> — {entry.position}</span>
+              {entry.institution && (
+                <span class="education__institution"> — {entry.institution}</span>
               )}
             </h3>
             {entry.description && (
-              <p class="experience__description">{entry.description}</p>
+              <p class="education__description">{entry.description}</p>
             )}
           </div>
         </div>
@@ -37,11 +37,11 @@ const { experience } = Astro.props;
 }
 
 <style>
-  .experience {
+  .education {
     display: grid;
   }
 
-  .experience__entry {
+  .education__entry {
     display: grid;
     grid-template-columns: 10rem minmax(0, 1fr);
     gap: 1rem 1.75rem;
@@ -49,16 +49,16 @@ const { experience } = Astro.props;
     border-bottom: 1px dashed var(--border-strong);
   }
 
-  .experience__entry:first-child {
+  .education__entry:first-child {
     padding-top: 0;
   }
 
-  .experience__entry:last-child {
+  .education__entry:last-child {
     padding-bottom: 0;
     border-bottom: 0;
   }
 
-  .experience__period {
+  .education__period {
     margin: 0;
     font-family: var(--font-mono);
     font-size: var(--font-size-xs);
@@ -68,9 +68,9 @@ const { experience } = Astro.props;
     color: var(--muted-foreground);
   }
 
-  /* Double class selector to beat `.prose h3` specificity when the component
-     is rendered inside an article body. */
-  .experience__title.experience__title {
+  /* Double class selector to beat `.prose h3` specificity when rendered
+     inside an article body. */
+  .education__title.education__title {
     margin: 0;
     font-family: var(--font-display);
     font-size: var(--font-size-base);
@@ -78,23 +78,23 @@ const { experience } = Astro.props;
     color: var(--foreground);
   }
 
-  .experience__title-link {
+  .education__title-link {
     text-decoration: none;
     transition: color var(--duration-fast) var(--ease-out);
   }
 
-  .experience__title-link:hover,
-  .experience__title-link:focus-visible {
+  .education__title-link:hover,
+  .education__title-link:focus-visible {
     color: var(--accent);
   }
 
-  .experience__position {
+  .education__institution {
     font-weight: 400;
     color: var(--muted-foreground);
   }
 
   /* Double class to keep description sizing even inside `.prose p`. */
-  .experience__description.experience__description {
+  .education__description.education__description {
     margin: 0.5rem 0 0;
     color: var(--muted-foreground);
     font-size: var(--font-size-md);
@@ -103,7 +103,7 @@ const { experience } = Astro.props;
   }
 
   @media (max-width: 640px) {
-    .experience__entry {
+    .education__entry {
       grid-template-columns: 1fr;
       gap: 0.25rem;
     }

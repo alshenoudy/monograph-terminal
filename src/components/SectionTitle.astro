@@ -1,0 +1,13 @@
+---
+interface Props {
+  /** Section heading text. Also used as the section id for anchored linking. */
+  title: string;
+  /** Element ID for the heading. Falls back to a slugified version of title. */
+  id?: string;
+}
+
+const { title, id } = Astro.props;
+const headingId = id || title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+---
+
+<h2 id={headingId} class="section-title">{title}</h2>

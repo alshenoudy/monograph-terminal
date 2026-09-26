@@ -1,10 +1,12 @@
 ---
 import { getCollection } from "astro:content";
+import Education from "@/components/Education.astro";
 import Experience from "@/components/Experience.astro";
+import SectionTitle from "@/components/SectionTitle.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
+import SkillChips from "@/components/SkillChips.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { heroConfig } from "@/config/hero";
 import { siteConfig } from "@/config/site";
 import { visiblePosts } from "@/lib/posts";
 
@@ -23,41 +25,189 @@ const allPosts = visiblePosts(await getCollection("posts"));
         <p class="pagehead-description">{siteConfig.about}</p>
       </header>
 
-      <div class="prose">
-        <h2>What gets published here</h2>
-        <p>
-          Long-form notes on building software: the decision behind a change, what it cost, and what
-          would be done differently next time. Posts are written to be read once, carefully, rather
-          than skimmed.
-        </p>
+      <div class="about">
+        <section class="about__section" aria-labelledby="experience-heading">
+          <SectionTitle title="Experience" id="experience-heading" />
+          <Experience experience={siteConfig.experience} />
+        </section>
 
-        <h2>How it is written</h2>
-        <p>
-          Every post aims to be reproducible and honest about trade-offs. If something did not work,
-          that goes in too. Corrections are made in place, with the update date shown at the top of
-          the post.
-        </p>
+        <section class="about__section" aria-labelledby="education-heading">
+          <SectionTitle title="Education" id="education-heading" />
+          <Education education={siteConfig.education} />
+        </section>
 
-        <h2>Who writes it</h2>
-        <p>
-          {siteConfig.authorName} writes everything published here. The archive is organized by
-          category for the shape of the work, and by tag for the specific topics covered.
-        </p>
-
-        <h2>Experience</h2>
-        <Experience experience={heroConfig.experience} />
-
-        <h2>Get in touch</h2>
-        <p>
-          Questions, corrections, and requests are welcome through the <a href="/contact/">contact page</a>.
-        </p>
         {
-          siteConfig.email && (
-            <p>You can also email <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> directly.</p>
+          siteConfig.projects.length > 0 && (
+            <section class="about__section" aria-labelledby="projects-heading">
+              <SectionTitle title="Projects" id="projects-heading" />
+              <ul class="cv-list">
+                {siteConfig.projects.map((project) => (
+                  <li class="cv-list__item">
+                    {project.href ? (
+                      <a href={project.href} class="cv-list__title">{project.title}</a>
+                    ) : (
+                      <span class="cv-list__title">{project.title}</span>
+                    )}
+                    {project.description && (
+                      <p class="cv-list__description">{project.description}</p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
           )
         }
+
+        {
+          siteConfig.publications.length > 0 && (
+            <section class="about__section" aria-labelledby="publications-heading">
+              <SectionTitle title="Publications" id="publications-heading" />
+              <ul class="cv-list">
+                {siteConfig.publications.map((publication) => (
+                  <li class="cv-list__item">
+                    {publication.href ? (
+                      <a href={publication.href} class="cv-list__title">{publication.title}</a>
+                    ) : (
+                      <span class="cv-list__title">{publication.title}</span>
+                    )}
+                    {(publication.venue || publication.year) && (
+                      <p class="cv-list__meta">
+                        {publication.venue}
+                        {publication.venue && publication.year && " — "}
+                        {publication.year}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        {
+          siteConfig.skills.length > 0 && (
+            <section class="about__section" aria-labelledby="skills-heading">
+              <SectionTitle title="Skills" id="skills-heading" />
+              <div class="about__skill-groups">
+                {siteConfig.skills.map((group) => (
+                  <SkillChips title={group.group} items={group.items} />
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        {
+          siteConfig.interests.length > 0 && (
+            <section class="about__section" aria-labelledby="interests-heading">
+              <SectionTitle title="Interests" id="interests-heading" />
+              <SkillChips items={siteConfig.interests} />
+            </section>
+          )
+        }
+
+        <section class="about__section" aria-labelledby="contact-heading">
+          <SectionTitle title="Get in touch" id="contact-heading" />
+          <div class="about__contact">
+            <p>
+              Questions, corrections, and requests are welcome through the <a href="/contact/">contact page</a>.
+            </p>
+            {
+              siteConfig.email && (
+                <p>You can also email <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> directly.</p>
+              )
+            }
+          </div>
+        </section>
       </div>
     </div>
   </main>
   <SiteFooter />
+
+  <style>
+    .about__section {
+      margin-top: var(--space-section);
+      /* Padding (not child margins) so the trailing room is never swallowed
+         by margin collapsing with the next section's margin-top. */
+      padding-bottom: 0.75rem;
+    }
+
+    .about__section:first-child {
+      margin-top: 0;
+    }
+
+    /* Reading copy for the contact blurb only; the CV sections above manage
+       their own internal rhythm without prose margins. */
+    .about__contact {
+      font-size: var(--font-size-readable);
+      line-height: 1.75;
+      color: color-mix(in srgb, var(--foreground) 92%, transparent);
+      text-wrap: pretty;
+    }
+
+    .about__contact p {
+      margin: 0.75rem 0;
+    }
+
+    .about__contact p:first-child {
+      margin-top: 0;
+    }
+
+    .about__contact a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.2em;
+    }
+
+    .about__contact a:hover {
+      color: var(--accent-strong);
+    }
+
+    .cv-list {
+      display: grid;
+      gap: 1.25rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .cv-list__item {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .cv-list__title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-base);
+      font-weight: 500;
+      color: var(--foreground);
+      text-decoration: none;
+      transition: color var(--duration-fast) var(--ease-out);
+    }
+
+    a.cv-list__title:hover,
+    a.cv-list__title:focus-visible {
+      color: var(--accent);
+    }
+
+    .cv-list__description,
+    .cv-list__meta {
+      margin: 0;
+      color: var(--muted-foreground);
+      font-size: var(--font-size-md);
+      line-height: 1.6;
+      text-wrap: pretty;
+    }
+
+    .cv-list__meta {
+      font-style: italic;
+    }
+
+    .about__skill-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+  </style>
 </BaseLayout>

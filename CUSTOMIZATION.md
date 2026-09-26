@@ -4,9 +4,12 @@ Use this guide when adapting Monograph for a real blog.
 
 ## Site Settings
 
-Edit [src/config/site.ts](./src/config/site.ts) first. It holds the wordmark, default metadata,
-canonical domain, language and date locale, the home hero intro (`about`), the compact CV block
-(`cv`), social links, and the newsletter and contact form settings.
+Edit [src/config/site.ts](./src/config/site.ts) first. It is the single source of truth for the
+whole site: the wordmark, default metadata, canonical domain, language and date locale, the author
+identity (role, intro, email, resume), the full CV (facts, experience, education, projects,
+publications, skills, interests), social links, navigation, and the newsletter and contact form
+settings. The home hero (`heroConfig`) and the About page (`aboutConfig`) are thin re-export
+slices of `siteConfig`, so nothing else needs editing.
 
 Set `siteConfig.siteUrl` before building for production. Canonical URLs, social image URLs, RSS,
 `robots.txt`, the sitemap, and JSON-LD all derive from it.
@@ -19,34 +22,31 @@ image mark, replace the `.wordmark` anchor in
 ### Home Hero CV
 
 The front page opens with a compact CV hero rendered by
-[src/components/ProfileHero.astro](./src/components/ProfileHero.astro). It reads `name`, `about`,
-`email`, and `socials` from the site config, plus a `cv` object:
+[src/components/ProfileHero.astro](./src/components/ProfileHero.astro). It reads `name`, `role`,
+`about`, `email`, and `socials` from `siteConfig`, plus the CV fields:
 
-```ts
-cv: {
-  role: "Writer & software engineer", // line under the name; delete for none
-  facts: [                            // label→value rows; empty array hides the block
-    { label: "now", value: "Writing here and shipping Monograph" },
-    { label: "prev", value: "Platform teams, 2019—2026", href: "/about/" },
-    { label: "focus", value: "design systems, web performance, developer tools" },
-  ],
-  experience: [                      // CV entries; empty array hides the block
-    {
-      period: "2026 — Now",
-      title: "Staff Engineer",
-      position: "Meridian Labs",
-      description: "Own the design-system platform every product team builds on.",
-    },
-  ],
-  resumeUrl: "", // optional; adds a Resume pill when non-empty
-},
-```
+````ts
+role: "Writer & software engineer", // line under the name; delete for none
+facts: [                            // label→value rows; empty array hides the block
+  { label: "now", value: "Writing here and shipping Monograph" },
+  { label: "prev", value: "Platform teams, 2019—2026", href: "/about/" },
+  { label: "focus", value: "design systems, web performance, developer tools" },
+],
+experience: [                       // CV entries; empty array hides the block
+  {
+    period: "2026 — Now",
+    title: "Staff Engineer",
+    position: "Meridian Labs",
+    description: "Own the design-system platform every product team builds on.",
+  },
+],
+resumeUrl: "", // optional; adds a Resume pill when non-empty
 
 An empty `facts` array drops the fact rows; an empty `role` or `resumeUrl` drops those elements.
 Contact pills under the facts come from `siteConfig.socials` (RSS is excluded there — it already
 lives in the footer) plus a built-in `Email` pill from `siteConfig.email`.
 
-`cv.experience` renders through [src/components/Experience.astro](./src/components/Experience.astro):
+`experience` renders through [src/components/Experience.astro](./src/components/Experience.astro):
 a two-column sub-layout per entry — the `period` in eyebrow styling on the left, `Title -- Position`
 with a description paragraph on the right, and hairline separators between entries. The same
 component drives the Experience section on the home hero and on the About page, so editing the
@@ -73,7 +73,7 @@ export const footerNavigation = [
   { label: "Privacy", href: "/privacy/" },
   { label: "RSS", href: "/rss.xml" },
 ];
-```
+````
 
 `navigation` renders in the desktop header and the mobile menu; `footerNavigation` renders under the
 social icons in the footer. The current page is marked with `aria-current="page"` automatically, which

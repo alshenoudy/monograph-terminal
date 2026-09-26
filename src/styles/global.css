@@ -337,7 +337,9 @@
 
   /* Small uppercase section label with a hairline running out to the end of
      the column. */
-  .section-title {
+  /* Double class to keep the compact size even when the heading sits inside
+     a prose block whose h2/h3 rules have higher specificity. */
+  .section-title.section-title {
     display: flex;
     align-items: center;
     margin: 0 0 1.75rem;
@@ -349,7 +351,7 @@
     color: var(--foreground);
   }
 
-  .section-title::after {
+  .section-title.section-title::after {
     flex-grow: 1;
     height: 1px;
     margin-left: 1rem;

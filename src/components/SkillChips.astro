@@ -1,0 +1,49 @@
+---
+interface Props {
+  /** Optional group label rendered above the chips. */
+  title?: string;
+  /** Skill labels. Each becomes a non-clickable pill that wraps automatically. */
+  items: string[];
+}
+
+const { title, items } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <div class="skill-chips" role="list" aria-label={title}>
+      {title && <span class="skill-chips__title eyebrow" role="listitem">{title}</span>}
+      {items.map((item) => (
+        <span class="skill-chip" role="listitem">{item}</span>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .skill-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.6rem;
+  }
+
+  .skill-chips__title {
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+
+  .skill-chip {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    padding: 0.35rem 0.75rem;
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    color: var(--muted-foreground);
+    border-radius: var(--radius-full);
+  }
+</style>

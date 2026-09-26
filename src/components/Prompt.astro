@@ -11,7 +11,7 @@ interface Props {
   class?: string;
 }
 
-const { text = siteConfig.tagline.replace(/^❯\s*/, ""), class: className } = Astro.props;
+const { text = siteConfig.tagline, class: className } = Astro.props;
 ---
 
 <p class:list={["prompt", className]}>

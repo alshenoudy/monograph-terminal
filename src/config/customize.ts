@@ -51,18 +51,20 @@ export type Social = {
   href: string;
 };
 
+const brand = "John's blog";
 const name = "John Doe";
 
 export const siteConfig = {
   /* ------------------------------------------------------------- identity --- */
 
-  /** Wordmark shown in the header and footer. Monograph uses text, never a logo image. */
+  /** Website name — wordmark, page titles, and site-wide metadata. */
+  brand,
+  /** Author name — home hero, About page, and contact page. */
   name,
-  /** Short line directly under the name in the home hero. */
+  /** Short line directly under the name in the home hero and the About page header. */
   role: "Writer & software engineer",
   /** Intro paragraph in the home hero and the About page header. */
-  about:
-    "A text-first Astro theme for essays, notes, and long-form writing. Notes on building software, published when there is something worth saying.",
+  about: "AI Researcher & Developer test",
   /** Terminal-style label rendered as `❯ tagline` by the Prompt component. */
   tagline: "whoami",
   /** Contact email shared by the hero, the About page, and the contact page. */
@@ -198,8 +200,8 @@ export const siteConfig = {
 
   /* --------------------------------------------------------- site metadata --- */
 
-  /** Default page title suffix and RSS feed name. */
-  title: `${name} - A minimal Astro blog theme`,
+  /** Default page title and RSS feed name. */
+  title: brand,
   description:
     "A text-first Astro theme for essays, notes, and long-form writing, with a command-palette search and a light/dark reading mode.",
   /** Canonical domain. Must be set before building for production. */

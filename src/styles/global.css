@@ -679,7 +679,7 @@
 
   .wordmark {
     font-family: var(--font-display);
-    font-size: var(--font-size-xl);
+    font-size: calc(var(--font-size-xl) * 0.85);
     font-weight: 600;
     letter-spacing: -0.02em;
     text-decoration: none;

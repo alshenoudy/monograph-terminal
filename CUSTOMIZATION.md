@@ -13,7 +13,7 @@ settings. Every page and component imports from this one file; nothing else need
 Set `siteConfig.siteUrl` before building for production. Canonical URLs, social image URLs, RSS,
 `robots.txt`, the sitemap, and JSON-LD all derive from it.
 
-The header shows `siteConfig.name` as plain text. There is no logo slot by design — if you want an
+The header shows `siteConfig.brand` as plain text. There is no logo slot by design — if you want an
 image mark, replace the `.wordmark` anchor in
 [src/components/SiteHeader.astro](./src/components/SiteHeader.astro) and the matching one in
 [src/components/SiteFooter.astro](./src/components/SiteFooter.astro).
@@ -21,8 +21,11 @@ image mark, replace the `.wordmark` anchor in
 ### Home Hero CV
 
 The front page opens with a compact CV hero rendered by
-[src/components/ProfileHero.astro](./src/components/ProfileHero.astro). It reads `name`, `role`,
-`about`, `email`, and `socials` from `siteConfig`, plus the CV fields:
+[src/components/ProfileHero.astro](./src/components/ProfileHero.astro). The identity block at the
+top — name, `role` caption, and `about` intro — comes from the shared
+[src/components/ProfileHeader.astro](./src/components/ProfileHeader.astro), which the About page
+reuses for its own header. The hero reads `email` and `socials` from `siteConfig`, plus the CV
+fields:
 
 ````ts
 role: "Writer & software engineer", // line under the name; delete for none

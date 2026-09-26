@@ -35,7 +35,7 @@ const currentYear = new Date().getFullYear();
 
     <div class="mt-10 grid gap-10 text-center md:grid-cols-3 md:items-center md:gap-8 md:text-left">
       <div>
-        <a href="/" class="wordmark">{siteConfig.name}</a>
+        <a href="/" class="wordmark">{siteConfig.brand}</a>
         <p class="mt-2 text-xs text-muted-foreground">&copy; {currentYear}. All rights reserved.</p>
       </div>
 
@@ -47,7 +47,7 @@ const currentYear = new Date().getFullYear();
                 <a
                   href={item.href}
                   class="social-btn"
-                  aria-label={item.label === "RSS" ? "RSS feed" : `${siteConfig.name} on ${item.label}`}
+                  aria-label={item.label === "RSS" ? "RSS feed" : `${siteConfig.brand} on ${item.label}`}
                   rel={item.href.startsWith("http") ? "noreferrer" : undefined}
                 >
                   <LocalIcon name={item.icon} className="h-[0.95rem] w-[0.95rem]" />

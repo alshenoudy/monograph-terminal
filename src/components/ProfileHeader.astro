@@ -1,0 +1,45 @@
+---
+import { siteConfig } from "@/config/customize";
+
+/*
+ * Identity header shared by the home hero and the About page: the name,
+ * the short role caption directly under it, and the intro paragraph.
+ * All content is read from `siteConfig`.
+ */
+const { name, role, about } = siteConfig;
+---
+
+<div class="profile-header">
+  <h1 class="profile-header__name">{name}</h1>
+  {role && <p class="profile-header__role">{role}</p>}
+  <p class="profile-header__about">{about}</p>
+</div>
+
+<style>
+  .profile-header__name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--font-size-hero);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  .profile-header__role {
+    margin: 0.6rem 0 0;
+    font-family: var(--font-display);
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    color: var(--muted-foreground);
+  }
+
+  .profile-header__about {
+    margin: 1.35rem 0 0;
+    color: var(--foreground);
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+</style>

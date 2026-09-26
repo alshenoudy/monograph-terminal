@@ -20,7 +20,7 @@ interface Props {
 const { page } = Astro.props;
 const allPosts = visiblePosts(await getCollection("posts"));
 const title = page.currentPage === 1 ? "Archive" : `Archive - Page ${page.currentPage}`;
-const description = `Every post published on ${siteConfig.name}.`;
+const description = `Every post published on ${siteConfig.brand}.`;
 const withTrailingSlash = (url: string | undefined) => (url && !url.endsWith("/") ? `${url}/` : url);
 const prevUrl = withTrailingSlash(page.url.prev);
 const nextUrl = withTrailingSlash(page.url.next);

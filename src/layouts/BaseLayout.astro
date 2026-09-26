@@ -26,11 +26,11 @@ const {
 
 const canonical = new URL(Astro.url.pathname, siteConfig.siteUrl).toString();
 const absoluteImage = new URL(image, siteConfig.siteUrl).toString();
-const pageTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.name}`;
+const pageTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.brand}`;
 const defaultStructuredData = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: siteConfig.name,
+  name: siteConfig.brand,
   url: siteConfig.siteUrl,
   description: siteConfig.description,
   publisher: {
@@ -54,11 +54,11 @@ const schema = structuredData ?? defaultStructuredData;
     <link rel="canonical" href={canonical} />
     {prevUrl && <link rel="prev" href={new URL(prevUrl, siteConfig.siteUrl).toString()} />}
     {nextUrl && <link rel="next" href={new URL(nextUrl, siteConfig.siteUrl).toString()} />}
-    <link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} RSS`} href={new URL("/rss.xml", siteConfig.siteUrl).toString()} />
+    <link rel="alternate" type="application/rss+xml" title={`${siteConfig.brand} RSS`} href={new URL("/rss.xml", siteConfig.siteUrl).toString()} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta property="og:locale" content={siteConfig.locale} />
     <meta property="og:type" content={type} />
-    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:site_name" content={siteConfig.brand} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />

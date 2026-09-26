@@ -250,6 +250,28 @@
     }
   }
 
+  /* ---------------------------------------------------------------- article ---
+   * Post page body: prose column plus a sticky table of contents on wide
+   * screens, stacked on narrow ones.
+   */
+
+  .article-body {
+    display: grid;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (min-width: 1200px) {
+    .article-body {
+      grid-template-columns: minmax(0, 1fr) 13rem;
+      gap: 3rem;
+    }
+
+    .article-body__prose {
+      min-width: 0;
+    }
+  }
+
   /* Home sidebar: sticky beside the feed on wide screens, stacked below it on
      narrow ones. */
   .sidebar {

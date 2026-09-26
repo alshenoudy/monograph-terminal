@@ -1,0 +1,180 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+  minDepth?: number;
+  maxDepth?: number;
+  label?: string;
+}
+
+const { headings, minDepth = 2, maxDepth = 3, label = "On this page" } = Astro.props;
+
+const items = headings.filter(({ depth }) => depth >= minDepth && depth <= maxDepth);
+---
+
+{
+  items.length > 0 && (
+    <aside class="toc" aria-labelledby="toc-heading">
+      <nav aria-label={label}>
+        <p id="toc-heading" class="toc__label">
+          {label}
+        </p>
+        <ol class="toc__list" role="list">
+          {items.map((heading) => (
+            <li class={`toc__item toc__item--depth-${heading.depth}`}>
+              <a href={`#${heading.slug}`} class="toc__link" data-toc-link data-toc-slug={heading.slug}>
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </aside>
+  )
+}
+
+<script is:inline>
+  /* Highlight the table-of-contents entry for the heading nearest the top of
+     the viewport. Progressive enhancement: navigation still works without JS. */
+  (() => {
+    const toc = document.querySelector(".toc");
+    if (!toc) return;
+
+    const links = Array.from(toc.querySelectorAll("[data-toc-link]"));
+    if (links.length === 0) return;
+
+    const slugs = links.map((link) => link.getAttribute("data-toc-slug")).filter(Boolean);
+    const targets = slugs
+      .map((slug) => document.getElementById(slug))
+      .filter(Boolean);
+
+    if (targets.length === 0) return;
+
+    const setActive = (active) => {
+      links.forEach((link) => {
+        const isMatch = link.getAttribute("data-toc-slug") === active;
+        link.classList.toggle("toc__link--active", isMatch);
+        link.setAttribute("aria-current", isMatch ? "location" : "false");
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .map((entry) => entry.target.id)
+          .sort((a, b) => {
+            const rectA = document.getElementById(a)?.getBoundingClientRect();
+            const rectB = document.getElementById(b)?.getBoundingClientRect();
+            return (rectA?.top ?? 0) - (rectB?.top ?? 0);
+          });
+
+        if (visible.length > 0) {
+          setActive(visible[0]);
+        }
+      },
+      {
+        rootMargin: "-10% 0px -80% 0px",
+        threshold: 0,
+      },
+    );
+
+    targets.forEach((target) => observer.observe(target));
+
+    /* Activate the closest heading above the viewport on load. */
+    const topTarget = targets.reduce((closest, target) => {
+      const rect = target.getBoundingClientRect();
+      if (rect.top <= window.innerHeight * 0.1) {
+        if (!closest) return target;
+        const closestRect = closest.getBoundingClientRect();
+        return rect.top > closestRect.top ? target : closest;
+      }
+      return closest;
+    }, null);
+
+    if (topTarget) setActive(topTarget.id);
+  })();
+</script>
+
+<style>
+  .toc {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+  }
+
+  .toc__label {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  .toc__list {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .toc__item {
+    margin: 0;
+  }
+
+  .toc__link {
+    display: block;
+    padding: 0.3rem 0;
+    font-size: var(--font-size-sm);
+    line-height: 1.45;
+    color: var(--muted-foreground);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .toc__item--depth-3 .toc__link {
+    padding-left: 0.9rem;
+  }
+
+  .toc__link:hover,
+  .toc__link:focus-visible {
+    color: var(--foreground);
+  }
+
+  .toc__link--active {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  @media (min-width: 1200px) {
+    .toc {
+      position: sticky;
+      top: 4.5rem;
+      max-height: calc(100vh - 6rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    /* A subtle left rule lines the TOC up with the reading column edge. */
+    .toc__list {
+      border-left: 1px solid var(--border);
+      padding-left: 0.75rem;
+    }
+
+    .toc__item--depth-3 .toc__link {
+      padding-left: 0;
+    }
+  }
+
+  @media (max-width: 1199px) {
+    .toc {
+      padding: 1rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+  }
+</style>

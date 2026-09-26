@@ -5,6 +5,7 @@ import LocalIcon from "@/components/LocalIcon.astro";
 import PostCard from "@/components/PostCard.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Callout from "@/components/mdx/Callout.astro";
 import CodeGroup from "@/components/mdx/CodeGroup.astro";
@@ -37,7 +38,7 @@ interface Props {
 }
 
 const { post, allPosts } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 const mdxComponents = { Callout, CodeGroup, CodeGroupItem };
 const data = post.data;
 const related = getRelated(allPosts, post);
@@ -146,7 +147,7 @@ const structuredData = {
       </header>
 
       {data.cover && (
-        <figure class="article-image inner">
+        <figure class="article-image canvas">
           <Image
             src={data.cover.src}
             alt={data.cover.alt}
@@ -170,8 +171,11 @@ const structuredData = {
         </figure>
       )}
 
-      <div class="prose canvas mt-12">
-        <Content components={mdxComponents} />
+      <div class="article-body outer">
+        <div class="article-body__prose prose canvas mt-12">
+          <Content components={mdxComponents} />
+        </div>
+        <TableOfContents headings={headings} />
       </div>
 
       {(newer || older) && (
@@ -233,7 +237,7 @@ const structuredData = {
 
     /* Progressive enhancement: every code block in the article body gets a copy
        button, added client-side so the rendered HTML stays plain. */
-    document.querySelectorAll(".prose pre").forEach((pre, index) => {
+    document.querySelectorAll(".article-body__prose pre").forEach((pre, index) => {
       if (pre.closest(".code-copy-frame")) return;
 
       const code = pre.querySelector("code");
@@ -339,11 +343,13 @@ const structuredData = {
       text-wrap: pretty;
     }
 
-    /* Only the block margins are set here: the inline `auto` margins come from
-       `.inner` and must survive, or the wide feature image stops centering. */
+    /* The image sits inside the reading column (`.canvas`) so it never breaks
+       the page's text measure. The `auto` inline margins are now provided by
+       `.canvas`. */
     .article-image {
       margin-top: 3rem;
       margin-bottom: 0;
+      padding: 0;
     }
 
     /* Capped so an unusually tall cover cannot push the article's first
